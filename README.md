@@ -78,5 +78,5 @@ Clique [aqui](https://github.com/viniciusgomesrod/lds-aluguel-de-carros/blob/mai
 ## Licença
 
 Este projeto está licenciado sob a [MIT License](./LICENSE).
-Você pode usar, modificar e distribuir este código, desde que os **devidos créditos sejam dados**, com link para o [original repository](https://github.com/viniciusgomesrod/portfolio). 
-Este projeto foi desenvolvido por [Vinícius Gomes](https://github.com/viniciusgomesrod) e [Thomás Ramos](https://github.com/Thomasramos02) inspirado no portfolio de [Luca Azalim](https://github.com/lucaazalim).
+Você pode usar, modificar e distribuir este código, desde que os **devidos créditos sejam dados**, com link para o [original repository](https://github.com/viniciusgomesrod/lds-aluguel-de-carros). 
+Este projeto foi desenvolvido por [Vinícius Gomes](https://github.com/viniciusgomesrod) e [Thomás Ramos](https://github.com/Thomasramos02).
