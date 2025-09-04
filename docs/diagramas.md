@@ -30,7 +30,9 @@ Mostra a organização física do sistema em módulos, suas dependências e inte
 
 ---
 
-- **Diagrama de Implantação:** Descreve a arquitetura física, representando hardware, servidores, nós de rede e a distribuição do software nos dispositivos.
+## Diagrama de Implantação:
+
+Descreve a arquitetura física, representando hardware, servidores, nós de rede e a distribuição do software nos dispositivos.
 
 ![Diagrama de Implantacao](https://github.com/viniciusgomesrod/lds-aluguel-de-carros/docs.png)
 
