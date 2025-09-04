@@ -1,4 +1,12 @@
-# Sistema de Aluguel de Carros
+ # Sistema de Aluguel de Carros
+
+## Demonstração do Projeto
+
+Veja abaixo uma demonstração do sistema funcionando:
+
+![Demonstração do Sistema](./docs/demontracao.gif)
+
+---
 
 ## 🛠️ Tecnologias e Arquitetura
 
