@@ -61,6 +61,17 @@ O sistema segue o padrão **MVC (Model-View-Controller)**, complementado com as 
 - **Reutilização**: Serviços e DTOs podem ser reutilizados em diferentes partes da aplicação.
 - **Segurança**: Exposição controlada de dados via DTOs, evitando leaks de entidades do domínio.
 
+---
+
+## Diagramas do Projeto
+
+Clique [aqui](https://github.com/viniciusgomesrod/lds-aluguel-de-carros/blob/main/docs/diagramas.md) para acessar os diagramas do projeto, incluindo diagramas de classes, casos de uso, pacotes, componentes e implantação.
+
+---
+
+## Histórias de Usuário
+
+Clique [aqui](https://github.com/viniciusgomesrod/lds-aluguel-de-carros/blob/main/docs/historias-de-usuario.md) para acessar as histórias de usuário do projeto, detalhando os requisitos e funcionalidades do sistema sob a perspectiva dos usuários finais.
 
 ---
 
