@@ -83,6 +83,15 @@ Clique [aqui](https://github.com/viniciusgomesrod/lds-aluguel-de-carros/blob/mai
 
 ---
 
+### Ferramentas Utilizadas
+
+- **VSCode**: Editor de código leve e multiplataforma, com suporte a extensões e integração com sistemas de versionamento.
+- **Drawio**: Ferramenta online para criação de diagramas, fluxogramas e modelagens visuais.
+- **AstahUML**: Software para modelagem UML, auxiliando na representação de classes, casos de uso e diagramas de sequência.
+- **GitHub**: Plataforma de hospedagem e versionamento de código baseada em Git, que facilita o trabalho colaborativo em equipe.
+
+---
+
 ## Licença
 
 Este projeto está licenciado sob a [MIT License](./LICENSE).
