@@ -2,7 +2,7 @@
 
 Representa as entidades do sistema, seus atributos, métodos e relacionamentos, mostrando a estrutura estática do domínio.
 
-![Diagrama de Classes](https://github.com/viniciusgomesrod/lds-aluguel-de-carros/docs.png)
+![Diagrama de Classes](https://github.com/viniciusgomesrod/lds-aluguel-de-carros/blob/main/docs/lab2-diagrama-classes-aluguel-de-carros.drawio.png)
 
 ---
 
