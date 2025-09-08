@@ -18,7 +18,7 @@ Demonstra as interações entre usuários (atores) e o sistema, descrevendo as f
 
 Organiza as classes e componentes em grupos lógicos, facilitando a modularização e a navegação no sistema.
 
-![Diagrama de Pacotes](https://github.com/viniciusgomesrod/lds-aluguel-de-carros/docs.png)
+![Diagrama de Pacotes](https://github.com/viniciusgomesrod/lds-aluguel-de-carros/blob/main/docs/Diagrama%20de%20pacote%20aluguel%20de%20carro.drawio.png)
 
 ---
 
