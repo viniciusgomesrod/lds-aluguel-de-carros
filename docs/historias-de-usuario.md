@@ -3,7 +3,7 @@
 Histórias de usuário são representações de necessidades dos usuários que podem ser utilizadas para definir e organizar os requisitos de um sistema. Elas escrevem funcionalidades de maneira simples e curta, apenas com detalhes suficientes para fazer uma estimativa de risco razoavelmente baixo. Devem ser focadas nas necessidades e nos benefícios para o usuário, evitando descrever detalhes de tecnologia, banco de dados e algoritmos específicos. Além disso, elas servem de guia para a criação de testes de aceitação. Elas estão relacionadas aos requisitos funcionais de negócio, ou seja, não devem ser escritas para um sistema e sim para o usuário.
 
 **1. Cadastro de Usuário**
-- 1.1 - Como cliente, quero me cadastrar no sistema para poder acessar as funcionalidades de aluguel de automóveis.
+- hs 1.1 - Como cliente, quero me cadastrar no sistema para poder acessar as funcionalidades de aluguel de automóveis.
 - 1.2 - Como agente (empresa ou banco), quero poder acessar o sistema após meu cadastro para realizar a avaliação e modificação de pedidos.
 - 1.3 - Como usuário, quero poder fazer login no sistema para acessar minha conta com segurança.
 - 1.4 - Como usuário, quero poder editar meus dados cadastrais para manter minhas informações atualizadas.
