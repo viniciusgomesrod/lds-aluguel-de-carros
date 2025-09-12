@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "agentes")
 public class Agente extends Usuario {
 
-    private String id;
+    private Long id;
     private String cnpj;
     private String razaoSocial;
     

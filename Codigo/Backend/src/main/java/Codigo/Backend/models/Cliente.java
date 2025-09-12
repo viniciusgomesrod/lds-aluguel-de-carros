@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "clientes")
 public class Cliente extends Usuario {
 
-    
+    private Long id;
     private String nome;
     private Endereco endereco;
     private String cpf;
