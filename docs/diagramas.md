@@ -24,15 +24,15 @@ Organiza as classes e componentes em grupos lógicos, facilitando a modularizaç
 
 ## Diagrama de Componentes:
 
-Mostra a organização física do sistema em módulos, suas dependências e interfaces, evidenciando a estrutura do software.
+Mostra a organização física e lógica do sistema em módulos, suas dependências e interfaces, evidenciando a estrutura do software. Tem maior relação com o time de desenvolvimento, por ter uma visão lógica do software e da arquitetura.
 
-![Diagrama de Componentes](https://github.com/viniciusgomesrod/lds-aluguel-de-carros/docs.png)
+![Diagrama de Componentes](https://github.com/viniciusgomesrod/lds-aluguel-de-carros/blob/main/docs/diagrama-componentes.jpeg)
 
 ---
 
 ## Diagrama de Implantação:
 
-Descreve a arquitetura física, representando hardware, servidores, nós de rede e a distribuição do software nos dispositivos.
+Descreve a arquitetura física, representando hardware, servidores, nós de rede e a distribuição do software nos dispositivos. Tem maior relação com o time de infraestrutura (DevOps), por ter uma visão física do sistema e da arquitetura.
 
 ![Diagrama de Implantacao](https://github.com/viniciusgomesrod/lds-aluguel-de-carros/docs.png)
 
