@@ -10,7 +10,7 @@ Representa as entidades do sistema, seus atributos, métodos e relacionamentos, 
 
 Demonstra as interações entre usuários (atores) e o sistema, descrevendo as funcionalidades principais sob a perspectiva do usuário.
 
-![Diagrama de Casos de Uso](https://github.com/viniciusgomesrod/lds-aluguel-de-carros/docs.png)
+![Diagrama de Casos de Uso](https://github.com/viniciusgomesrod/lds-aluguel-de-carros/blob/main/docs/diagrama-casos-de-uso.png)
 
 ---
 
