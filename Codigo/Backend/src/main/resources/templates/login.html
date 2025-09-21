@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - AutoRent Style</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Slab:wght@400&display=swap" rel="stylesheet">
+
+    <style>
+        /* Paleta de cores e fontes do tema AutoRent */
+        :root {
+            --ar-dark-blue: #212529;
+            --ar-gray-text: #adb5bd;
+            --ar-light-text: #f8f9fa;
+            --ar-primary-orange: #f06b4a;
+            --ar-primary-orange-hover: #d15a3e;
+            --ar-input-bg: #343a40;
+            --ar-border-color: #495057;
+
+            --bs-body-font-family: "Roboto Slab", serif;
+            --bs-heading-font-family: "Montserrat", sans-serif;
+            --bs-border-radius-sm: 0.25rem;
+            --bs-border-radius-lg: 0.5rem;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: var(--bs-body-font-family);
+            font-size: 1rem;
+            color: var(--ar-light-text);
+            background-color: var(--ar-dark-blue);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Estilos do container do formulário */
+        .card-container {
+            width: 100%;
+            max-width: 450px; /* Menor que o de cadastro */
+            background-color: #2b3035;
+            padding: 40px;
+            border-radius: var(--bs-border-radius-lg);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-header h1 {
+            font-family: var(--bs-heading-font-family);
+            font-weight: 700;
+            font-size: 2.2rem;
+            color: var(--ar-light-text);
+            text-align: center;
+            margin: 0 0 2.5rem 0;
+        }
+        
+        /* Estilos para os campos do formulário */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-family: var(--bs-heading-font-family);
+            font-weight: 700;
+            color: var(--ar-gray-text);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.85rem;
+            font-family: var(--bs-body-font-family);
+            font-size: 1rem;
+            border: 1px solid var(--ar-border-color);
+            border-radius: var(--bs-border-radius-sm);
+            background-color: var(--ar-input-bg);
+            color: var(--ar-light-text);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .form-control::placeholder {
+            color: var(--ar-gray-text);
+            opacity: 0.7;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--ar-primary-orange);
+            box-shadow: 0 0 0 0.25rem rgba(240, 107, 74, 0.25);
+        }
+
+        /* Opções extras: Lembrar-me e Esqueceu a senha */
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--ar-gray-text);
+        }
+        
+        .form-check {
+            display: flex;
+            align-items: center;
+        }
+        
+        .form-check-input {
+            margin-right: 0.5rem;
+            accent-color: var(--ar-primary-orange); /* Moderno, estiliza o checkbox */
+        }
+        
+        .form-options a {
+            color: var(--ar-gray-text);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .form-options a:hover {
+            color: var(--ar-primary-orange);
+            text-decoration: underline;
+        }
+
+        /* Botão de Login */
+        .btn-submit {
+            width: 100%;
+            padding: 0.9rem 1rem;
+            font-family: var(--bs-heading-font-family);
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--ar-light-text);
+            background-color: var(--ar-primary-orange);
+            border: none;
+            border-radius: var(--bs-border-radius-sm);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-submit:hover {
+            background-color: var(--ar-primary-orange-hover);
+        }
+
+        /* Link para Cadastro */
+        .register-link {
+            text-align: center;
+            margin-top: 2.5rem;
+            color: var(--ar-gray-text);
+        }
+
+        .register-link a {
+            color: var(--ar-primary-orange);
+            font-weight: 700;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        .register-link a:hover {
+            color: var(--ar-primary-orange-hover);
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card-container">
+        <div class="card-header">
+            <h1>Acesse sua Conta</h1>
+        </div>
+        
+        <form action="#" method="POST">
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" class="form-control" placeholder="seuemail@exemplo.com" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Senha</label>
+                <input type="password" id="password" class="form-control" placeholder="Sua senha" required>
+            </div>
+
+            <div class="form-options">
+                <div class="form-check">
+                    <input type="checkbox" id="rememberMe" class="form-check-input">
+                    <label for="rememberMe">Lembrar-me</label>
+                </div>
+                <a href="#">Esqueceu sua senha?</a>
+            </div>
+            
+            <button type="submit" class="btn-submit">Entrar</button>
+        </form>
+
+        <div class="register-link">
+            <p>Não tem uma conta? <a href="#">Cadastre-se</a></p>
+        </div>
+    </div>
+
+</body>
+</html>
