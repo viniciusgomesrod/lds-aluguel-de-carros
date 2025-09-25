@@ -1,5 +1,8 @@
 package Codigo.Backend.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -30,6 +33,7 @@ public class Cliente extends Usuario {
 
     public static final int MAX_EMPREGOS = 3;
 
-    private double redimentosAuferidos;
+    private List<Double> rendimentosAuferidos = new ArrayList<>();
+
 
 }

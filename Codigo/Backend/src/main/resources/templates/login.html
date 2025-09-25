@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -167,8 +167,19 @@
             color: var(--ar-primary-orange-hover);
             text-decoration: underline;
         }
+
+        /* Estilo para a mensagem de erro */
+        .alert {
+            margin-top: 20px;
+            padding: 10px;
+            color: #d8000c;
+            border-radius: var(--bs-border-radius-sm);
+            text-align: center;
+            font-family: var(--bs-body-font-family);
+            font-size: 0.9rem;
+        }
     </style>
-</head>
+    </head>
 <body>
 
     <div class="card-container">
@@ -176,15 +187,19 @@
             <h1>Acesse sua Conta</h1>
         </div>
         
-        <form action="#" method="POST">
+        <div th:if="${erro}" class="alert">
+            <p th:text="${erro}"></p>
+        </div>
+
+        <form th:action="@{/login}" method="POST">
             <div class="form-group">
                 <label for="email">E-mail</label>
-                <input type="email" id="email" class="form-control" placeholder="seuemail@exemplo.com" required>
+                <input type="email" id="email" name="email" class="form-control" placeholder="seuemail@exemplo.com" required>
             </div>
             
             <div class="form-group">
                 <label for="password">Senha</label>
-                <input type="password" id="password" class="form-control" placeholder="Sua senha" required>
+                <input type="password" id="password" name="senha" class="form-control" placeholder="Sua senha" required>
             </div>
 
             <div class="form-options">
@@ -197,9 +212,9 @@
             
             <button type="submit" class="btn-submit">Entrar</button>
         </form>
-
+        
         <div class="register-link">
-            <p>Não tem uma conta? <a href="#">Cadastre-se</a></p>
+            <p>Não tem uma conta? <a href="./cadastro.html">Cadastre-se</a></p>
         </div>
     </div>
 

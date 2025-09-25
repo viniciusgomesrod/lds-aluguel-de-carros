@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,16 +9,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Slab:wght@400&display=swap" rel="stylesheet">
 
     <style>
-        /* Paleta de cores e fontes adaptadas do tema AutoRent e Bootstrap */
         :root {
-            --ar-dark-blue: #212529; /* Cor de fundo principal, similar ao cabeçalho da imagem */
-            --ar-gray-text: #adb5bd; /* Texto cinza claro para detalhes */
-            --ar-light-text: #f8f9fa; /* Texto branco/quase branco */
-            --ar-primary-orange: #f06b4a; /* Laranja/vermelho do botão "SAIBA MAIS" */
-            --ar-primary-orange-hover: #d15a3e; /* Laranja/vermelho mais escuro para hover */
-            --ar-input-bg: #343a40; /* Fundo dos inputs mais escuro */
-            --ar-border-color: #495057; /* Bordas dos inputs e fieldset */
-
+            --ar-dark-blue: #212529;
+            --ar-gray-text: #adb5bd;
+            --ar-light-text: #f8f9fa;
+            --ar-primary-orange: #f06b4a;
+            --ar-primary-orange-hover: #d15a3e;
+            --ar-input-bg: #343a40;
+            --ar-border-color: #495057;
             --bs-body-font-family: "Roboto Slab", serif;
             --bs-heading-font-family: "Montserrat", sans-serif;
             --bs-border-radius: 0.375rem;
@@ -34,8 +32,8 @@
             margin: 0;
             font-family: var(--bs-body-font-family);
             font-size: 1rem;
-            color: var(--ar-light-text); /* Texto principal branco */
-            background-color: var(--ar-border-color); /* Fundo escuro */
+            color: var(--ar-light-text);
+            background-color: var(--ar-dark-blue);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -43,11 +41,10 @@
             padding: 40px 20px;
         }
 
-        /* Estilos do container do formulário */
         .card-container {
             width: 100%;
             max-width: 700px;
-            background-color: #2b3035; /* Um pouco mais claro que o body para contraste */
+            background-color: #2b3035;
             padding: 40px;
             border-radius: var(--bs-border-radius-lg);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
@@ -62,7 +59,6 @@
             margin: 0 0 2rem 0;
         }
         
-        /* Layout para campos lado a lado */
         .form-row {
             display: flex;
             gap: 1.5rem;
@@ -71,7 +67,6 @@
             flex: 1;
         }
         
-        /* Estilos para os campos do formulário */
         .form-group {
             margin-bottom: 1.25rem;
         }
@@ -80,7 +75,7 @@
             display: block;
             font-family: var(--bs-heading-font-family);
             font-weight: 700;
-            color: var(--ar-gray-text); /* Labels em cinza claro */
+            color: var(--ar-gray-text);
             margin-bottom: 0.5rem;
             font-size: 0.9rem;
         }
@@ -92,23 +87,22 @@
             font-size: 1rem;
             border: 1px solid var(--ar-border-color);
             border-radius: var(--bs-border-radius-sm);
-            background-color: var(--ar-input-bg); /* Fundo escuro para inputs */
-            color: var(--ar-light-text); /* Texto dos inputs branco */
+            background-color: var(--ar-input-bg);
+            color: var(--ar-light-text);
             transition: border-color 0.2s ease, box-shadow 0.2s ease;
         }
 
         .form-control::placeholder {
             color: var(--ar-gray-text);
-            opacity: 0.7; /* Para placeholders serem mais sutis */
+            opacity: 0.7;
         }
 
         .form-control:focus {
             outline: none;
             border-color: var(--ar-primary-orange);
-            box-shadow: 0 0 0 0.25rem rgba(240, 107, 74, 0.25); /* Sombra suave com a cor primária */
+            box-shadow: 0 0 0 0.25rem rgba(240, 107, 74, 0.25);
         }
         
-        /* Seções do formulário */
         fieldset {
             border: 1px solid var(--ar-border-color);
             border-radius: var(--bs-border-radius);
@@ -120,20 +114,19 @@
             font-family: var(--bs-heading-font-family);
             font-weight: 700;
             color: var(--ar-light-text);
-            background-color: #2b3035; /* Fundo igual ao card para sobrepor a borda */
+            background-color: #2b3035;
             padding: 0 0.5rem;
             width: auto;
             font-size: 1.2rem;
         }
 
-        /* Botão de Adicionar Renda */
         .btn-secondary {
             width: 100%;
             padding: 0.6rem 1rem;
             font-family: var(--bs-heading-font-family);
             font-size: 0.9rem;
             font-weight: 700;
-            color: var(--ar-light-text); /* Texto branco */
+            color: var(--ar-light-text);
             background-color: var(--ar-input-bg);
             border: 1px solid var(--ar-border-color);
             border-radius: var(--bs-border-radius-sm);
@@ -146,14 +139,13 @@
             border-color: var(--ar-primary-orange);
         }
 
-        /* Botão de Cadastro (usando a cor do botão "SAIBA MAIS") */
         .btn-submit {
             width: 100%;
             padding: 0.9rem 1rem;
             font-family: var(--bs-heading-font-family);
             font-size: 1.1rem;
             font-weight: 700;
-            color: var(--ar-light-text); /* Texto branco no botão de destaque */
+            color: var(--ar-light-text);
             background-color: var(--ar-primary-orange);
             border: none;
             border-radius: var(--bs-border-radius-sm);
@@ -175,7 +167,7 @@
         }
 
         .login-link a {
-            color: var(--ar-primary-orange); /* Link com a cor de destaque */
+            color: var(--ar-primary-orange);
             font-weight: 700;
             text-decoration: none;
         }
@@ -192,32 +184,32 @@
             <h1>Crie sua Conta AutoRent</h1>
         </div>
         
-        <form action="#" method="POST">
+        <form th:action="@{/clientes/criar}" th:object="${cliente}" method="post">
 
             <fieldset>
                 <legend>Dados Pessoais</legend>
                 <div class="form-group">
                     <label for="nome">Nome Completo</label>
-                    <input type="text" id="nome" class="form-control" required>
+                    <input type="text" id="nome" class="form-control" th:field ="*{nome}" required>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label for="cpf">CPF</label>
-                        <input type="text" id="cpf" class="form-control" placeholder="000.000.000-00" required>
+                        <input type="text" id="cpf" class="form-control" placeholder="000.000.000-00" th:field="*{CPF}" required>
                     </div>
                     <div class="form-group">
                         <label for="rg">RG</label>
-                        <input type="text" id="rg" class="form-control" required>
+                        <input type="text" id="rg" class="form-control" th:field="*{rg}"required>
                     </div>
                 </div>
-                 <div class="form-row">
+                <div class="form-row">
                     <div class="form-group">
                         <label for="telefone">Telefone</label>
-                        <input type="tel" id="telefone" class="form-control" placeholder="(00) 90000-0000" required>
+                        <input type="tel" id="telefone" class="form-control" placeholder="(00) 90000-0000" th:field="*{telefone}" required>
                     </div>
                     <div class="form-group">
                         <label for="profissao">Profissão</label>
-                        <input type="text" id="profissao" class="form-control" required>
+                        <input type="text" id="profissao" class="form-control" required th:field="*{profissao}">
                     </div>
                 </div>
             </fieldset>
@@ -226,60 +218,66 @@
                 <legend>Endereço</legend>
                 <div class="form-group">
                     <label for="cep">CEP</label>
-                    <input type="text" id="cep" class="form-control" style="width: 150px;">
+                    <input type="text" id="cep" class="form-control" style="width: 150px;" th:field="*{endereco.cep}">
                 </div>
                 <div class="form-group">
-                    <label for="endereco">Logradouro (Rua, Av.)</label>
-                    <input type="text" id="endereco" class="form-control">
+                    <label for="logradouro">Logradouro (Rua, Av.)</label>
+                    <input type="text" id="logradouro" class="form-control" th:field="*{endereco.logradouro}">
                 </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label for="numero">Número</label>
-                        <input type="text" id="numero" class="form-control">
+                        <input type="text" id="numero" class="form-control" th:field="*{endereco.numero}">
                     </div>
                     <div class="form-group">
                         <label for="complemento">Complemento</label>
-                        <input type="text" id="complemento" class="form-control" placeholder="Apto, Bloco, etc.">
+                        <input type="text" id="complemento" class="form-control" placeholder="Apto, Bloco, etc." th:field="*{endereco.complemento}">
                     </div>
                 </div>
-                 <div class="form-group">
+                <div class="form-group">
                     <label for="bairro">Bairro</label>
-                    <input type="text" id="bairro" class="form-control">
+                    <input type="text" id="bairro" class="form-control" th:field="*{endereco.bairro}">
                 </div>
-                 <div class="form-row">
+                <div class="form-row">
                     <div class="form-group">
                         <label for="cidade">Cidade</label>
-                        <input type="text" id="cidade" class="form-control">
+                        <input type="text" id="cidade" class="form-control" th:field="*{endereco.cidade}">
                     </div>
                     <div class="form-group">
                         <label for="estado">Estado</label>
-                        <input type="text" id="estado" class="form-control" style="width: 100px;">
+                        <input type="text" id="estado" class="form-control" style="width: 100px;" th:field="*{endereco.estado}">
                     </div>
                 </div>
             </fieldset>
 
+
             <fieldset>
                 <legend>Rendimentos Auferidos</legend>
-                <div id="income-sources">
-                    <div class="income-block form-row">
-                        <div class="form-group">
-                            <label for="fonte-renda-1">Fonte Pagadora 1</label>
-                            <input type="text" id="fonte-renda-1" class="form-control" placeholder="Nome da Empresa">
-                        </div>
-                        <div class="form-group">
-                            <label for="renda-mensal-1">Renda Mensal 1 (R$)</label>
-                            <input type="text" id="renda-mensal-1" class="form-control" placeholder="Ex: 3500,00">
-                        </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="rendimento1">Rendimento 1 (R$)</label>
+                        <input type="number" step="0.01" id="rendimento1" class="form-control"
+                            th:field="*{rendimentosAuferidos[0]}" placeholder="Ex: 3500.00">
+                    </div>
+                    <div class="form-group">
+                        <label for="rendimento2">Rendimento 2 (R$)</label>
+                        <input type="number" step="0.01" id="rendimento2" class="form-control"
+                            th:field="*{rendimentosAuferidos[1]}" placeholder="Ex: 2000.00">
+                    </div>
+                    <div class="form-group">
+                        <label for="rendimento3">Rendimento 3 (R$)</label>
+                        <input type="number" step="0.01" id="rendimento3" class="form-control"
+                            th:field="*{rendimentosAuferidos[2]}" placeholder="Ex: 1500.00">
                     </div>
                 </div>
-                <button type="button" id="add-income-btn" class="btn-secondary">+ Adicionar outra fonte de renda</button>
             </fieldset>
+
             
             <fieldset>
                 <legend>Dados de Acesso</legend>
                 <div class="form-group">
                     <label for="email">E-mail</label>
-                    <input type="email" id="email" class="form-control" required>
+                    <input type="email" id="email" class="form-control" th:field="*{email}"required>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
@@ -288,7 +286,7 @@
                     </div>
                     <div class="form-group">
                         <label for="confirmar-senha">Confirmar Senha</label>
-                        <input type="password" id="confirmar-senha" class="form-control" required>
+                        <input type="password" id="confirmar-senha" class="form-control" th:field="*{senha}"required>
                     </div>
                 </div>
             </fieldset>
@@ -302,83 +300,50 @@
     </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const addIncomeBtn = document.getElementById('add-income-btn');
-        const incomeSourcesContainer = document.getElementById('income-sources');
-        let incomeCount = 1;
-
-        // Adicionar fontes de renda
-        addIncomeBtn.addEventListener('click', function() {
-            if (incomeCount < 3) {
-                incomeCount++;
-                const newIncomeBlock = document.createElement('div');
-                newIncomeBlock.classList.add('income-block', 'form-row');
-                newIncomeBlock.innerHTML = `
-                    <div class="form-group">
-                        <label for="fonte-renda-${incomeCount}">Fonte Pagadora ${incomeCount}</label>
-                        <input type="text" id="fonte-renda-${incomeCount}" class="form-control" placeholder="Nome da Empresa">
-                    </div>
-                    <div class="form-group">
-                        <label for="renda-mensal-${incomeCount}">Renda Mensal ${incomeCount} (R$)</label>
-                        <input type="text" id="renda-mensal-${incomeCount}" class="form-control" placeholder="Ex: 3500,00">
-                    </div>
-                `;
-                incomeSourcesContainer.appendChild(newIncomeBlock);
-
-                if (incomeCount === 3) {
-                    addIncomeBtn.style.display = 'none'; // Oculta o botão ao atingir o limite
-                }
-            }
-        });
-
-        // Máscara de CPF
-        const cpfInput = document.getElementById('cpf');
+document.addEventListener('DOMContentLoaded', function() {
+    
+    // Máscara de CPF
+    const cpfInput = document.getElementById('cpf');
+    if (cpfInput) {
         cpfInput.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, ''); // Remove tudo que não é dígito
+            let value = e.target.value.replace(/\D/g, '');
             value = value.replace(/(\d{3})(\d)/, '$1.$2');
             value = value.replace(/(\d{3})(\d)/, '$1.$2');
             value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
             e.target.value = value.slice(0, 14);
         });
-        
-        // Máscara de Telefone
-        const telefoneInput = document.getElementById('telefone');
+    }
+
+    // Máscara de Telefone
+    const telefoneInput = document.getElementById('telefone');
+    if (telefoneInput) {
         telefoneInput.addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
             value = value.replace(/^(\d{2})(\d)/g, '($1) $2');
             value = value.replace(/(\d{5})(\d)/, '$1-$2');
             e.target.value = value.slice(0, 15);
         });
-        
-        // Máscara de CEP (apenas números, máximo 8)
-        const cepInput = document.getElementById('cep');
+    }
+
+    // Máscara de CEP
+    const cepInput = document.getElementById('cep');
+    if (cepInput) {
         cepInput.addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
             value = value.replace(/^(\d{5})(\d)/, '$1-$2');
-            e.target.value = value.slice(0, 9); // Ex: 00000-000
+            e.target.value = value.slice(0, 9);
         });
+    }
 
-        // Máscara para RG (apenas números, até 9 dígitos)
-        const rgInput = document.getElementById('rg');
+    // Máscara de RG
+    const rgInput = document.getElementById('rg');
+    if (rgInput) {
         rgInput.addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
             e.target.value = value.slice(0, 9);
         });
-
-        // Máscara para Renda Mensal (formato de moeda)
-        const incomeInputs = incomeSourcesContainer.querySelectorAll('[id^="renda-mensal-"]');
-        incomeInputs.forEach(input => {
-            input.addEventListener('input', function(e) {
-                let value = e.target.value.replace(/\D/g, ''); // Remove tudo que não é dígito
-                if (value) {
-                    value = (parseInt(value) / 100).toFixed(2) + ''; // Transforma em float e formata
-                    value = value.replace('.', ','); // Troca ponto por vírgula para padrão BR
-                    value = value.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.'); // Adiciona pontos nos milhares
-                }
-                e.target.value = value;
-            });
-        });
-    });
+    }
+});
 </script>
 
 </body>

@@ -12,5 +12,6 @@ public interface agenteRepository extends JpaRepository<Agente, Long> {
     Optional<Agente> findByCnpj(String cnpj);
 
     Void deleteByCnpj(String cnpj);
+    Optional<Agente> findByEmail(String email);
     
 }

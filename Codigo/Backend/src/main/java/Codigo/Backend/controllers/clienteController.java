@@ -5,33 +5,54 @@ import org.springframework.web.bind.annotation.RestController;
 import Codigo.Backend.Services.clienteService;
 import Codigo.Backend.models.Cliente;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 
 
-@RestController
+@Controller
 @RequestMapping("/clientes")
 public class clienteController {
     
     @Autowired
     private clienteService clienteServices;
 
+    @GetMapping("/cadastro")
+    public String abrirFormulario(Model model){
+        Cliente novoCliente = new Cliente();
+        List<Double> rendimentosIniciais = Arrays.asList(null, null, null);
+        novoCliente.setRendimentosAuferidos(rendimentosIniciais);
+        model.addAttribute("cliente", novoCliente);
+        return "cadastro";
+    }
+
     @PostMapping("/criar")
-    public ResponseEntity<Cliente> criarCliente(@RequestBody Cliente cliente) {
+    public String criarCliente(@ModelAttribute Cliente cliente, Model model) {
         try {
             clienteServices.criarCliente(cliente);
-            return ResponseEntity.ok(cliente);
+            model.addAttribute("mensagem", "Cliente cadastrado com sucesso!");
+            Cliente novoCliente = new Cliente();
+            List<Double> rendimentosIniciais = Arrays.asList(null, null, null);
+            novoCliente.setRendimentosAuferidos(rendimentosIniciais);
+            model.addAttribute("cliente", novoCliente);
+           
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+             model.addAttribute("mensagem", "Erro ao cadastrar cliente: " + e.getMessage());
         }
+        return "cadastro";
     }
 
     @GetMapping("/obter/{id}")

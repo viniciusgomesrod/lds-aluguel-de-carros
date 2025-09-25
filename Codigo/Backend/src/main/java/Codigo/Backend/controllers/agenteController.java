@@ -21,8 +21,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 public class agenteController {
 
     private final agenteService agenteService;
-    
-    // Endpoints que utilizam agenteFacade para operações relacionadas a Agente
+
     @PostMapping("/criar")
     public ResponseEntity<Agente> criarAgente( @RequestBody Agente agente) {
         try {
