@@ -15,15 +15,15 @@ public class SecurityConfig implements WebMvcConfigurer {
         http
             .csrf(csrf -> csrf.disable()) 
             .authorizeHttpRequests(authorize -> authorize
-                // Permite acesso irrestrito às URLs de cadastro e a todos os recursos estáticos.
+                // Permite acesso irrestrito a URLs de cadastro e a todos
                 .requestMatchers("/clientes/cadastro", "/clientes/criar", "/css/**", "/js/**", "/images/**").permitAll()
                 // Todas as outras requisições devem ser autenticadas.
                 .anyRequest().authenticated()
             )
             // Habilita a autenticação via formulário e configura a página de login
             .formLogin(formLogin -> formLogin
-                .loginPage("/login") // Especifica a URL da página de login.
-                .permitAll() // Garante que a página de login e o POST para ela estejam acessíveis a todos.
+                .loginPage("/login")
+                .permitAll()
             )
             // Permite o logout
             .logout(logout -> logout
@@ -35,9 +35,7 @@ public class SecurityConfig implements WebMvcConfigurer {
     
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        // Mapeia a URL / para a view de login.
         registry.addViewController("/").setViewName("login");
-        // Mapeia a URL /login para a view de login.
         registry.addViewController("/login").setViewName("login");
     }
 }
