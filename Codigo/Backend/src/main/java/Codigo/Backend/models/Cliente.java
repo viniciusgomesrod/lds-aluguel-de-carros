@@ -3,6 +3,7 @@ package Codigo.Backend.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -25,8 +26,10 @@ public class Cliente extends Usuario {
     @Embedded
     private Endereco endereco;
 
+    @Column(unique = true)
     private String CPF;
 
+    @Column(unique = true)
     private String rg;
 
     private String profissao;

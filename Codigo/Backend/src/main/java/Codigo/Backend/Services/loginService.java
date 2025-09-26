@@ -14,22 +14,15 @@ public class loginService {
     @Autowired
     private clienteRepository clienteRepository;
 
-    public Object login(String email, String senha){
-        var cliente = clienteRepository.findByEmail(email)
-        .filter(c -> c.getSenha().equals(senha)).orElse(null);
+   public Object loginPorEmail(String email) {
+        var cliente = clienteRepository.findByEmail(email).orElse(null);
+        if (cliente != null) return cliente;
 
-        if(cliente != null){
-            return cliente;
-        }
+        var agente = agenteRepository.findByEmail(email).orElse(null);
+        if (agente != null) return agente;
 
-        var agente = agenteRepository.findByEmail(email)
-        .filter(a -> a.getSenha().equals(senha)).orElse(null);
-
-        if(agente != null){
-            return agente;
-        }
-        
         return null;
     }
+
     
 }

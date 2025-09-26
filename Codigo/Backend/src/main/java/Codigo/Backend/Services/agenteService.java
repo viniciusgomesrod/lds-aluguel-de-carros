@@ -1,7 +1,8 @@
 package Codigo.Backend.Services;
 
-import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 import Codigo.Backend.models.Agente;
 import Codigo.Backend.repositories.agenteRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -12,42 +13,56 @@ public class agenteService {
     @Autowired
     private agenteRepository agenteRepository;
 
-    //metodo para criar um agente
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    // método para criar um agente
     public void criarAgente(Agente agente) {
+        // Criptografa a senha antes de salvar
+        String senhaCriptografada = passwordEncoder.encode(agente.getSenha());
+        agente.setSenha(senhaCriptografada);
+
         agenteRepository.save(agente);
     }
-    
-    //metodo para obter um agente por id
+
+    // método para obter um agente por id
     public Agente obterAgentePorId(Long id) {
-        return agenteRepository.findById(id).orElseThrow
-        (()-> new EntityNotFoundException("Agente com ID inválido ou não existe."));
+        return agenteRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Agente com ID inválido ou não existe."));
     }
 
-    //metodo para obter um agente por cnpj
+    // método para obter um agente por CNPJ
     public Agente obterAgentePorCnpj(String cnpj) {
-        return agenteRepository.findByCnpj(cnpj).orElseThrow(
-        ()-> new EntityNotFoundException("Agente com CNPJ inválido ou não existe."));
+        return agenteRepository.findByCnpj(cnpj)
+                .orElseThrow(() -> new EntityNotFoundException("Agente com CNPJ inválido ou não existe."));
     }
 
-    //metodo para atualizar um agente
+    // método para atualizar um agente
     public Agente atualizarAgente(String cnpj, Agente agente) {
         Agente agenteAtual = obterAgentePorCnpj(cnpj);
-        Agente Atualizado = agente.builder()
-            .id(agenteAtual.getId())
-            .cnpj(agente.getCnpj())
-            .telefone(agente.getTelefone())
-            .email(agente.getEmail())
-            .build();
-        agenteRepository.save(Atualizado);
-        return Atualizado;
+
+        // Recriptografa a senha se for diferente da existente
+        if (!agente.getSenha().equals(agenteAtual.getSenha())) {
+            agente.setSenha(passwordEncoder.encode(agente.getSenha()));
+        }
+
+        Agente atualizado = agente.builder()
+                .id(agenteAtual.getId())
+                .cnpj(agente.getCnpj())
+                .telefone(agente.getTelefone())
+                .email(agente.getEmail())
+                .senha(agente.getSenha())
+                .build();
+
+        agenteRepository.save(atualizado);
+        return atualizado;
     }
-    
-    //metodo para deletar um agente
+
+    // método para deletar um agente
     public void deletarAgente(String cnpj) {
         if (!agenteRepository.findByCnpj(cnpj).isPresent()) {
-            throw new IllegalArgumentException("Agente com ID inválido ou não existe.");
+            throw new IllegalArgumentException("Agente com CNPJ inválido ou não existe.");
         }
         agenteRepository.deleteByCnpj(cnpj);
     }
-    
 }
