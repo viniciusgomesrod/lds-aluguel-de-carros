@@ -17,12 +17,8 @@ public class agenteService {
     private PasswordEncoder passwordEncoder;
 
     // método para criar um agente
-    public void criarAgente(Agente agente) {
-        // Criptografa a senha antes de salvar
-        String senhaCriptografada = passwordEncoder.encode(agente.getSenha());
-        agente.setSenha(senhaCriptografada);
-
-        agenteRepository.save(agente);
+    public Agente criarAgente(Agente agente) {
+        return agenteRepository.save(agente);
     }
 
     // método para obter um agente por id

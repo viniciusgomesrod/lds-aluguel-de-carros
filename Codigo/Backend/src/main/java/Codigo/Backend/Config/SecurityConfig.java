@@ -29,7 +29,7 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/", "/login", "/clientes/cadastro", "/clientes/criar", "/css/**", "/js/**", "/images/**").permitAll()
+            .requestMatchers("/", "/login", "/clientes/cadastro", "/clientes/criar", "/css/**", "/js/**", "/images/**","/agente/criar").permitAll()
             .requestMatchers("/cliente/**").hasRole("CLIENTE")
             .requestMatchers("/agente/**").hasRole("AGENTE")
             .anyRequest().authenticated()
