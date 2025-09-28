@@ -2,6 +2,7 @@ package Codigo.Backend.Services;
 
 import Codigo.Backend.models.Automovel;
 import Codigo.Backend.repositories.automovelRepository;
+import Codigo.Backend.repositories.aluguelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,9 @@ public class automovelService {
     
     @Autowired
     private automovelRepository automovelRepository;
+    
+    @Autowired
+    private aluguelRepository aluguelRepository;
 
     // Criar um novo automóvel
     public Automovel criarAutomovel(Automovel automovel) {
@@ -99,6 +103,13 @@ public class automovelService {
         if (!automovelRepository.existsById(id)) {
             throw new IllegalArgumentException("Automóvel com ID " + id + " não existe.");
         }
+        
+        // Verificar se o automóvel está sendo usado em algum aluguel ativo
+        List<Codigo.Backend.models.Aluguel> alugueisAtivos = aluguelRepository.findByAutomovelId(id);
+        if (!alugueisAtivos.isEmpty()) {
+            throw new IllegalArgumentException("Não é possível excluir o automóvel. Ele está sendo usado em " + alugueisAtivos.size() + " aluguel(is) ativo(s).");
+        }
+        
         automovelRepository.deleteById(id);
     }
 

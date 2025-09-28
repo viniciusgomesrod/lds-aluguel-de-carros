@@ -21,6 +21,9 @@ public interface aluguelRepository extends JpaRepository<Aluguel, Long> {
     // Encontrar aluguéis por cliente
     List<Aluguel> findByCliente_Id(Long clienteId);
     
+    // Encontrar aluguéis por automóvel
+    List<Aluguel> findByAutomovelId(Long automovelId);
+    
     // Encontrar aluguéis por nome do cliente
     List<Aluguel> findByCliente_Nome(String nome);
 
