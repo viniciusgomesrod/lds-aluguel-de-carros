@@ -40,22 +40,33 @@ public class automovelAgente {
 
     @PostMapping("/automoveis/criar")
     public String criarAutomovel(@ModelAttribute Automovel automovel) {
-        automovelService.criarAutomovel(automovel);
-        return "redirect:/agente/automoveis";
+        try {
+            automovelService.criarAutomovel(automovel);
+            return "redirect:/dashboardAgente?success=Automóvel+adicionado+com+sucesso";
+        } catch (IllegalArgumentException e) {
+            return "redirect:/dashboardAgente?error=" + e.getMessage().replace(" ", "+");
+        } catch (Exception e) {
+            return "redirect:/dashboardAgente?error=Erro+ao+adicionar+automóvel";
+        }
     }
 
     @GetMapping("/automoveis/editar/{id}")
     public String exibirFormularioEdicao(@PathVariable Long id, Model model) {
         Automovel automovel = automovelService.obterAutomovelPorId(id);
         model.addAttribute("automovel", automovel);
-        model.addAttribute("acao", "Editar");
         return "agente/formulario-automovel";
     }
 
     @PostMapping("/automoveis/atualizar/{id}")
     public String atualizarAutomovel(@PathVariable Long id, @ModelAttribute Automovel automovel) {
-        automovelService.atualizarAutomovel(id, automovel);
-        return "redirect:/agente/automoveis";
+        try {
+            automovelService.atualizarAutomovel(id, automovel);
+            return "redirect:/dashboardAgente?success=Automóvel+atualizado+com+sucesso";
+        } catch (IllegalArgumentException e) {
+            return "redirect:/dashboardAgente?error=" + e.getMessage().replace(" ", "+");
+        } catch (Exception e) {
+            return "redirect:/dashboardAgente?error=Erro+ao+atualizar+automóvel";
+        }
     }
 
     @GetMapping("/automoveis/deletar/{id}")

@@ -156,6 +156,11 @@ body { font-family:'Roboto Slab',sans-serif; color:var(--primary);}
                                 <button type="submit" class="btn btn-primary me-2">
                                     <i class="fas fa-save me-2"></i> Salvar Alterações
                                 </button>
+                                <a th:href="@{/clientes/excluir/{id}(id=${cliente.id})}" 
+                                   class="btn btn-danger"
+                                   onclick="return confirm('Tem certeza que deseja excluir sua conta? Esta ação não pode ser desfeita.')">
+                                    <i class="fas fa-trash me-2"></i> Excluir Conta
+                                </a>
                             </div>
                         </div>
                     </form>

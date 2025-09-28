@@ -29,8 +29,13 @@ public class clienteService {
     }
 
     //metodo para obter um cliente por cpf
-    public Cliente obterClientePorCPF(String cnpj) {
-        return clienteRepository.findByCPF(cnpj);
+    public Cliente obterClientePorCPF(String cpf) {
+        return clienteRepository.findByCPF(cpf).orElse(null);
+    }
+
+    //metodo para obter um cliente por email
+    public Cliente obterClientePorEmail(String email) {
+        return clienteRepository.findByEmail(email).orElse(null);
     }
 
     //metodo para atualizar um cliente

@@ -33,6 +33,11 @@ public class agenteService {
                 .orElseThrow(() -> new EntityNotFoundException("Agente com CNPJ inválido ou não existe."));
     }
 
+    // método para obter um agente por email
+    public Agente obterAgentePorEmail(String email) {
+        return agenteRepository.findByEmail(email).orElse(null);
+    }
+
     // método para atualizar um agente
     public Agente atualizarAgente(String cnpj, Agente agente) {
         Agente agenteAtual = obterAgentePorCnpj(cnpj);

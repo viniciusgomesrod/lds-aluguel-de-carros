@@ -5,7 +5,6 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Embeddable;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -37,7 +36,8 @@ public class Cliente extends Usuario {
 
     public static final int MAX_EMPREGOS = 3;
 
-   @ElementCollection
+   @ElementCollection(fetch = jakarta.persistence.FetchType.EAGER)
+    @lombok.Builder.Default
     private List<Double> rendimentosAuferidos = new ArrayList<>();
 
 

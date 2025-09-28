@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>AutoRent - Todos os Aluguéis</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://use.fontawesome.com/releases/v6.3.0/css/all.css" rel="stylesheet">
+    <style>
+        :root { --primary:#2c3e50; --secondary:#e74c3c; --light:#ecf0f1; }
+        body { font-family:'Roboto Slab',sans-serif; color:var(--primary);}
+        .navbar-dark { background-color:var(--primary)!important; }
+        .page-header { background-color:var(--light); padding:5rem 0 3rem; text-align:center;}
+        .page-header .heading { font-family:'Montserrat',sans-serif; font-size:2.5rem; font-weight:700; color:var(--primary);}
+        .card { transition:transform 0.3s, box-shadow 0.3s; border-radius:10px; border:none; margin-bottom:20px;}
+        .card:hover { transform:translateY(-5px); box-shadow:0 10px 20px rgba(0,0,0,0.1);}
+        .btn-primary { background-color:var(--secondary); border-color:var(--secondary);}
+        .btn-primary:hover { background-color:#c0392b; border-color:#c0392b;}
+        .status-badge { padding: 0.5rem 1rem; border-radius: 20px; font-weight: bold; }
+        .status-pendente { background-color: #fff3cd; color: #856404; }
+        .status-aprovado { background-color: #d4edda; color: #155724; }
+        .status-negado { background-color: #f8d7da; color: #721c24; }
+        .table th { background-color: var(--primary); color: white; }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <h3>AutoRent - Todos os Aluguéis</h3>
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" th:href="@{/dashboardAgente}">
+                    <i class="fas fa-arrow-left me-1"></i> Voltar ao Dashboard
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="page-header">
+        <div class="container">
+            <div class="heading text-uppercase">Todos os Aluguéis</div>
+            <p class="text-muted mt-3">Visualize e gerencie todos os aluguéis do sistema.</p>
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <div class="container mt-4">
+        <!-- Filtros -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5><i class="fas fa-filter me-2"></i>Filtros</h5>
+                        <div class="btn-group" role="group">
+                            <a th:href="@{/agente/alugueis}" class="btn btn-primary">Todos</a>
+                            <a th:href="@{/agente/alugueis/status/pendente}" class="btn btn-warning">Pendentes</a>
+                            <a th:href="@{/agente/alugueis/status/aprovado}" class="btn btn-success">Aprovados</a>
+                            <a th:href="@{/agente/alugueis/status/negado}" class="btn btn-danger">Rejeitados</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabela de Aluguéis -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-list me-2"></i>Lista de Aluguéis</h5>
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${#lists.isEmpty(alugueis)}" class="alert alert-info text-center">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Nenhum aluguel encontrado.
+                        </div>
+                        
+                        <div th:if="${not #lists.isEmpty(alugueis)}" class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Cliente</th>
+                                        <th>Automóvel</th>
+                                        <th>Período</th>
+                                        <th>Valor</th>
+                                        <th>Status</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="aluguel : ${alugueis}">
+                                        <td th:text="${aluguel.id}">001</td>
+                                        <td>
+                                            <strong th:text="${aluguel.cliente.nome}">João Silva</strong><br>
+                                            <small class="text-muted" th:text="${aluguel.cliente.email}">joao@email.com</small>
+                                        </td>
+                                        <td>
+                                            <strong th:text="${aluguel.automovel.marca + ' ' + aluguel.automovel.modelo}">Toyota Corolla</strong><br>
+                                            <small class="text-muted" th:text="${aluguel.automovel.placa}">ABC-1234</small>
+                                        </td>
+                                        <td>
+                                            <span th:text="${#temporals.format(aluguel.inicio, 'dd/MM/yyyy')}">15/10/2024</span> - 
+                                            <span th:text="${aluguel.termino != null ? #temporals.format(aluguel.termino, 'dd/MM/yyyy') : 'N/A'}">20/10/2024</span>
+                                        </td>
+                                        <td>
+                                            <strong class="text-success">R$ <span th:text="${#numbers.formatDecimal(aluguel.valorTotal, 1, 2)}">750,00</span></strong>
+                                        </td>
+                                        <td>
+                                            <span class="status-badge status-pendente" th:if="${aluguel.status == 'PENDENTE'}">PENDENTE</span>
+                                            <span class="status-badge status-aprovado" th:if="${aluguel.status == 'APROVADO'}">APROVADO</span>
+                                            <span class="status-badge status-negado" th:if="${aluguel.status == 'NEGADO'}">NEGADO</span>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                <a th:href="@{/agente/alugueis/{id}(id=${aluguel.id})}" 
+                                                   class="btn btn-sm btn-info" title="Ver Detalhes">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <a th:href="@{/agente/alugueis/{id}/analise-financeira(id=${aluguel.id})}" 
+                                                   class="btn btn-sm btn-warning" title="Análise Financeira">
+                                                    <i class="fas fa-chart-line"></i>
+                                                </a>
+                                                <form th:if="${aluguel.status == 'PENDENTE'}" 
+                                                      th:action="@{/agente/alugueis/{id}/aprovar(id=${aluguel.id})}" 
+                                                      method="post" style="display: inline;">
+                                                    <button type="submit" class="btn btn-sm btn-success" 
+                                                            title="Aprovar"
+                                                            onclick="return confirm('Tem certeza que deseja aprovar este aluguel?')">
+                                                        <i class="fas fa-check"></i>
+                                                    </button>
+                                                </form>
+                                                <button th:if="${aluguel.status == 'PENDENTE'}" 
+                                                        class="btn btn-sm btn-danger" 
+                                                        title="Rejeitar"
+                                                        th:onclick="'rejeitarAluguel(' + ${aluguel.id} + ')'">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function rejeitarAluguel(aluguelId) {
+            var motivo = prompt("Digite o motivo da rejeição:");
+            if (motivo !== null && motivo.trim() !== '') {
+                var form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/agente/alugueis/' + aluguelId + '/rejeitar';
+                
+                var motivoInput = document.createElement('input');
+                motivoInput.type = 'hidden';
+                motivoInput.name = 'motivo';
+                motivoInput.value = motivo;
+                
+                form.appendChild(motivoInput);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+    </script>
+</body>
+</html>

@@ -68,61 +68,30 @@
                     <form th:action="@{/clientes/alugueis/criar}" method="post" th:object="${aluguel}">
                         <input type="hidden" name="automovelId" th:value="${automovel.id}">
                         
-                        <!-- Datas do Aluguel -->
+                        <!-- Período do Aluguel -->
                         <div class="row mb-4">
                             <div class="col-md-6">
-                                <label for="dataRetirada" class="form-label fw-bold">
-                                    <i class="fas fa-calendar-plus me-2"></i>Data de Retirada
+                                <label for="inicio" class="form-label fw-bold">
+                                    <i class="fas fa-calendar-plus me-2"></i>Data de Início
                                 </label>
-                                <input type="date" 
+                                <input type="datetime-local" 
                                        class="form-control form-control-lg" 
-                                       id="dataRetirada"
-                                       th:field="*{dataRetirada}"
-                                       required
-                                       min="" th:attr="min=${#temporals.format(#temporals.createToday(), 'yyyy-MM-dd')}">
+                                       id="inicio"
+                                       th:field="*{inicio}"
+                                       required>
                             </div>
                             <div class="col-md-6">
-                                <label for="dataDevolucao" class="form-label fw-bold">
-                                    <i class="fas fa-calendar-minus me-2"></i>Data de Devolução
+                                <label for="termino" class="form-label fw-bold">
+                                    <i class="fas fa-calendar-minus me-2"></i>Data de Término
                                 </label>
-                                <input type="date" 
+                                <input type="datetime-local" 
                                        class="form-control form-control-lg" 
-                                       id="dataDevolucao"
-                                       th:field="*{dataDevolucao}"
-                                       required
-                                       min="" th:attr="min=${#temporals.format(#temporals.createToday(), 'yyyy-MM-dd')}">
+                                       id="termino"
+                                       th:field="*{termino}"
+                                       required>
                             </div>
                         </div>
                         
-                        <!-- Local de Retirada -->
-                        <div class="mb-4">
-                            <label for="local" class="form-label fw-bold">
-                                <i class="fas fa-map-marker-alt me-2"></i>Local de Retirada
-                            </label>
-                            <select class="form-select form-select-lg" 
-                                    id="local"
-                                    th:field="*{local}"
-                                    required>
-                                <option value="">Selecione o local de retirada</option>
-                                <option value="Loja Centro">Loja Centro</option>
-                                <option value="Loja Zona Sul">Loja Zona Sul</option>
-                                <option value="Loja Zona Norte">Loja Zona Norte</option>
-                                <option value="Aeroporto">Aeroporto</option>
-                                <option value="Shopping Center">Shopping Center</option>
-                            </select>
-                        </div>
-                        
-                        <!-- Informações Adicionais -->
-                        <div class="mb-4">
-                            <label for="observacoes" class="form-label fw-bold">
-                                <i class="fas fa-sticky-note me-2"></i>Observações (Opcional)
-                            </label>
-                            <textarea class="form-control" 
-                                      id="observacoes"
-                                      th:field="*{observacoes}"
-                                      rows="4"
-                                      placeholder="Alguma observação especial sobre o aluguel..."></textarea>
-                        </div>
                         
                         <!-- Termos e Condições -->
                         <div class="form-check mb-4">
@@ -161,17 +130,17 @@
                         Ano: <span th:text="${automovel.ano}">2023</span>
                     </p>
                     <p class="text-muted mb-2">
-                        <i class="fas fa-gas-pump me-2"></i>
-                        Combustível: <span th:text="${automovel.tipoCombustivel}">Flex</span>
+                        <i class="fas fa-id-card me-2"></i>
+                        Placa: <span th:text="${automovel.placa}">ABC-1234</span>
                     </p>
                     <p class="text-muted mb-3">
-                        <i class="fas fa-cog me-2"></i>
-                        Transmissão: <span th:text="${automovel.transmissao}">Automático</span>
+                        <i class="fas fa-barcode me-2"></i>
+                        Matrícula: <span th:text="${automovel.matricula}">Matrícula</span>
                     </p>
                     
                     <div class="border-top pt-3">
                         <h5 class="text-primary">
-                            R$ <span th:text="${#numbers.formatDecimal(automovel.precoDiaria, 1, 2)}">0,00</span>/dia
+                            R$ <span th:text="${#numbers.formatDecimal(automovel.valorDiaria, 1, 2)}">0,00</span>/dia
                         </h5>
                     </div>
                 </div>
@@ -227,32 +196,41 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // Cálculo do preço
-        const precoDiaria = <span th:text="${automovel.precoDiaria}">0</span>;
+        const precoDiaria = <span th:text="${automovel.valorDiaria}">0</span>;
         const diasInput = document.getElementById('diasAluguel');
         const subtotalEl = document.getElementById('subtotal');
         const totalEl = document.getElementById('total');
+        const valorTotalInput = document.getElementById('valorTotal');
         
         function calcularPreco() {
             const dias = parseInt(diasInput.value) || 1;
             const subtotal = precoDiaria * dias;
-            const taxas = 50.00;
-            const total = subtotal + taxas;
+            const taxaServico = subtotal * 0.10; // 10% de taxa de serviço
+            const seguro = 50.00; // Seguro fixo
+            const total = subtotal + taxaServico + seguro;
             
             subtotalEl.textContent = 'R$ ' + subtotal.toFixed(2).replace('.', ',');
             totalEl.textContent = 'R$ ' + total.toFixed(2).replace('.', ',');
+            valorTotalInput.value = total.toFixed(2);
         }
         
         diasInput.addEventListener('input', calcularPreco);
         calcularPreco(); // Calcular inicial
         
         // Validação de datas
-        const dataRetirada = document.getElementById('dataRetirada');
-        const dataDevolucao = document.getElementById('dataDevolucao');
+        const inicio = document.getElementById('inicio');
+        const termino = document.getElementById('termino');
         
-        dataRetirada.addEventListener('change', function() {
-            dataDevolucao.min = this.value;
-            if (dataDevolucao.value && dataDevolucao.value < this.value) {
-                dataDevolucao.value = '';
+        // Definir data mínima como agora
+        const now = new Date();
+        const nowString = now.toISOString().slice(0, 16);
+        inicio.min = nowString;
+        termino.min = nowString;
+        
+        inicio.addEventListener('change', function() {
+            termino.min = this.value;
+            if (termino.value && termino.value < this.value) {
+                termino.value = '';
             }
         });
     </script>

@@ -117,4 +117,26 @@ public class aluguelService {
 
         aluguelRepository.delete(aluguel);
     }
+
+    // Aprovar aluguel
+    public void aprovarAluguel(Long id) {
+        Aluguel aluguel = obterAluguelPorId(id);
+        aluguel.setStatus(StatusAluguel.APROVADO);
+        aluguelRepository.save(aluguel);
+    }
+
+    // Rejeitar aluguel
+    public void rejeitarAluguel(Long id, String motivo) {
+        Aluguel aluguel = obterAluguelPorId(id);
+        aluguel.setStatus(StatusAluguel.NEGADO);
+        
+        // Liberar automóvel se estava reservado
+        Automovel automovel = aluguel.getAutomovel();
+        if (automovel != null) {
+            automovel.setDisponivel(true);
+            automovelRepository.save(automovel);
+        }
+        
+        aluguelRepository.save(aluguel);
+    }
 }

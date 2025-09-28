@@ -24,6 +24,8 @@ public class Aluguel {
     private LocalDateTime inicio;
     private LocalDateTime termino;
     private double valorTotal;
+    private LocalDateTime dataCriacao = LocalDateTime.now();
+
     @ManyToOne
     @JoinColumn(name = "automovel_id", nullable = false)
     private Automovel automovel;

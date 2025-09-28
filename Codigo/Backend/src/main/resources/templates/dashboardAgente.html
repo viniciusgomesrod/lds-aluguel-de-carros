@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -7,13 +8,14 @@
     <meta name="author" content="AutoRent" />
     <title>AutoRent - Painel do Agente</title>
 
-    <!-- Font Awesome icons (free version)-->
+    <!-- Font Awesome icons (free version) -->
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-    <!-- Google fonts-->
+    <!-- Google fonts -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
     <style>
         :root {
             --primary: #2c3e50;
@@ -60,153 +62,188 @@
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
-        .btn-primary {
-            background-color: var(--secondary);
-            border-color: var(--secondary);
-        }
+        .btn-primary { background-color: var(--secondary); border-color: var(--secondary); }
+        .btn-primary:hover { background-color: #c0392b; border-color: #c0392b; }
 
-        .btn-primary:hover {
-            background-color: #c0392b;
-            border-color: #c0392b;
-        }
-        
-        .btn-success {
-            background-color: #27ae60;
-            border-color: #27ae60;
-        }
+        .btn-success { background-color: #27ae60; border-color: #27ae60; }
+        .btn-success:hover { background-color: #229954; border-color: #229954; }
 
-        .btn-success:hover {
-            background-color: #229954;
-            border-color: #229954;
-        }
-        
-        .btn-danger {
-            background-color: #c0392b;
-            border-color: #c0392b;
-        }
+        .btn-danger { background-color: #c0392b; border-color: #c0392b; }
+        .btn-danger:hover { background-color: #a93226; border-color: #a93226; }
 
-        .btn-danger:hover {
-            background-color: #a93226;
-            border-color: #a93226;
-        }
+        .page-section { padding: 6rem 0; }
 
-        .page-section {
-            padding: 6rem 0;
-        }
-
-        .alert-success {
-            background-color: #d4edda;
-            border-color: #c3e6cb;
-            color: #155724;
-        }
-
-        .alert-error {
-            background-color: #f8d7da;
-            border-color: #f5c6cb;
-            color: #721c24;
-        }
+        .alert-success { background-color: #d4edda; border-color: #c3e6cb; color: #155724; }
+        .alert-error { background-color: #f8d7da; border-color: #f5c6cb; color: #721c24; }
     </style>
 </head>
 <body id="page-top">
-    <!-- Navigation-->
+    <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
         <div class="container">
-            <a class="navbar-brand" th:href="@{/agente}">
-                <h3>AutoRent - Agente</h3>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                Menu
-                <i class="fas fa-bars ms-1"></i>
+            <a class="navbar-brand" th:href="@{/agente}"><h3>AutoRent - Agente</h3></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive">
+                Menu <i class="fas fa-bars ms-1"></i>
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
                     <li class="nav-item"><a class="nav-link" href="#requests">Pedidos Pendentes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#alugueis">Gerenciar Aluguéis</a></li>
                     <li class="nav-item"><a class="nav-link" href="#cars">Automóveis</a></li>
                     <li class="nav-item"><a class="nav-link" href="#reports">Relatórios</a></li>
                     <li class="nav-item">
                         <form th:action="@{/logout}" method="post" style="display: inline;">
-                            <button type="submit" class="nav-link btn btn-link" style="border: none; background: none;">
-                                Sair
-                            </button>
+                            <button type="submit" class="nav-link btn btn-link" style="border: none; background: none;">Sair</button>
                         </form>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
-    
-    <!-- Dashboard Masthead-->
+
+    <!-- Dashboard Masthead -->
     <header class="agent-masthead">
         <div class="container">
             <div class="heading text-uppercase">Painel do Agente AutoRent</div>
-            <p class="text-muted mt-3">Gerencie pedidos e a frota de automóveis.</p>
+            <p class="text-muted mt-3">Bem-vindo, <span th:text="${agente != null ? agente.razaoSocial : 'Agente'}">Agente</span>! Gerencie pedidos e a frota de automóveis.</p>
         </div>
     </header>
 
-    <!-- Alertas de Sucesso/Erro -->
-    <div th:if="${param.success}" class="alert alert-success alert-dismissible fade show m-3" role="alert">
-        <i class="fas fa-check-circle me-2"></i>
-        <span th:text="${param.success}">Operação realizada com sucesso!</span>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <!-- Alertas -->
+    <div th:if="${param.success}" class="alert alert-success alert-dismissible fade show m-3">
+        <i class="fas fa-check-circle me-2"></i> <span th:text="${param.success}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <div th:if="${param.error}" class="alert alert-danger alert-dismissible fade show m-3">
+        <i class="fas fa-exclamation-circle me-2"></i> <span th:text="${param.error}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
 
-    <div th:if="${param.error}" class="alert alert-danger alert-dismissible fade show m-3" role="alert">
-        <i class="fas fa-exclamation-circle me-2"></i>
-        <span th:text="${param.error}">Erro ao realizar operação!</span>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-
-    <!-- Pedidos Pendentes Section -->
+    <!-- Pedidos Pendentes -->
     <section class="page-section" id="requests">
         <div class="container">
             <div class="text-center">
-                <h2 class="section-heading text-uppercase">Pedidos Pendentes de Análise</h2>
+                <h2 class="section-heading text-uppercase">Pedidos de Análise</h2>
                 <h3 class="section-subheading text-muted">Revise os pedidos dos clientes.</h3>
             </div>
             <div class="d-flex justify-content-center mb-4">
-                <div class="btn-group" role="group" aria-label="Filtros">
-                    <button type="button" class="btn btn-outline-primary active" data-filter="pending">Pendentes</button>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-outline-warning active" data-filter="pending">Pendentes</button>
                     <button type="button" class="btn btn-outline-success" data-filter="approved">Aprovados</button>
                     <button type="button" class="btn btn-outline-danger" data-filter="rejected">Rejeitados</button>
                 </div>
             </div>
+
             <div class="row" id="request-list">
-                <!-- Cartão de Pedido Pendente de Exemplo -->
-                <div class="col-md-6 mb-4 request-card pending">
+                <!-- Pedidos Pendentes -->
+                <div class="col-md-6 mb-4 request-card pending" th:each="aluguel : ${alugueisPendentes}">
                     <div class="card p-3">
-                        <h5>Pedido #10123</h5>
-                        <p class="text-muted"><strong>Cliente:</strong> João Silva</p>
-                        <p class="text-muted"><strong>Carro:</strong> Ford Fusion</p>
-                        <p class="text-muted"><strong>Período:</strong> 01/10/2025 - 05/10/2025</p>
-                        <p class="text-muted"><strong>Crédito:</strong> Sim</p>
+                        <h5>Aluguel #<span th:text="${aluguel.id}"></span></h5>
+                        <p class="text-muted"><strong>Cliente:</strong> <span th:text="${aluguel.cliente.nome}"></span></p>
+                        <p class="text-muted"><strong>Carro:</strong> <span th:text="${aluguel.automovel.marca + ' ' + aluguel.automovel.modelo}"></span></p>
+                        <p class="text-muted"><strong>Período:</strong> <span th:text="${#temporals.format(aluguel.inicio, 'dd/MM/yyyy')}"></span> - <span th:text="${aluguel.termino != null ? #temporals.format(aluguel.termino, 'dd/MM/yyyy') : 'N/A'}"></span></p>
+                        <p class="text-muted"><strong>Valor:</strong> R$ <span th:text="${#numbers.formatDecimal(aluguel.valorTotal, 1, 2)}"></span></p>
                         <div class="d-flex justify-content-end">
-                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#reviewModal" data-request-id="10123" data-request-status="pending">Analisar</button>
+                            <a th:href="@{/agente/alugueis/{id}/analise-financeira(id=${aluguel.id})}" class="btn btn-info btn-sm me-2">
+                                <i class="fas fa-chart-line"></i> Análise
+                            </a>
+                            <button class="btn btn-success btn-sm me-2" data-bs-toggle="modal" data-bs-target="#reviewModal"
+                                th:attr="data-request-id=${aluguel.id},data-request-status='pending'">
+                                <i class="fas fa-check"></i> Aprovar
+                            </button>
+                            <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#rejectionModal"
+                                th:attr="data-request-id=${aluguel.id}">
+                                <i class="fas fa-times"></i> Rejeitar
+                            </button>
                         </div>
                     </div>
                 </div>
-                 <!-- Cartão de Pedido Aprovado de Exemplo -->
-                <div class="col-md-6 mb-4 request-card approved" style="display: none;">
+
+                <!-- Pedidos Aprovados -->
+                <div class="col-md-6 mb-4 request-card approved" th:each="aluguel : ${alugueisAprovados}" style="display:none;">
                     <div class="card p-3">
-                        <h5>Pedido #10124</h5>
-                        <p class="text-muted"><strong>Cliente:</strong> Maria Souza</p>
-                        <p class="text-muted"><strong>Carro:</strong> Jeep Renegade</p>
-                        <p class="text-muted"><strong>Período:</strong> 02/10/2025 - 07/10/2025</p>
-                        <p class="text-muted"><strong>Crédito:</strong> Não</p>
+                        <h5>Aluguel #<span th:text="${aluguel.id}"></span></h5>
+                        <p class="text-muted"><strong>Cliente:</strong> <span th:text="${aluguel.cliente.nome}"></span></p>
+                        <p class="text-muted"><strong>Carro:</strong> <span th:text="${aluguel.automovel.marca + ' ' + aluguel.automovel.modelo}"></span></p>
+                        <p class="text-muted"><strong>Período:</strong> <span th:text="${#temporals.format(aluguel.inicio, 'dd/MM/yyyy')}"></span> - <span th:text="${aluguel.termino != null ? #temporals.format(aluguel.termino, 'dd/MM/yyyy') : 'N/A'}"></span></p>
+                        <p class="text-muted"><strong>Valor:</strong> R$ <span th:text="${#numbers.formatDecimal(aluguel.valorTotal, 1, 2)}"></span></p>
                         <div class="d-flex justify-content-end">
-                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#reviewModal" data-request-id="10124" data-request-status="approved">Ver Detalhes</button>
+                            <a th:href="@{/agente/alugueis/{id}(id=${aluguel.id})}" class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver Detalhes</a>
                         </div>
                     </div>
                 </div>
-                 <!-- Cartão de Pedido Rejeitado de Exemplo -->
-                <div class="col-md-6 mb-4 request-card rejected" style="display: none;">
+
+                <!-- Pedidos Rejeitados -->
+                <div class="col-md-6 mb-4 request-card rejected" th:each="aluguel : ${alugueisNegados}" style="display:none;">
                     <div class="card p-3">
-                        <h5>Pedido #10125</h5>
-                        <p class="text-muted"><strong>Cliente:</strong> Pedro Costa</p>
-                        <p class="text-muted"><strong>Carro:</strong> Hyundai HB20</p>
-                        <p class="text-muted"><strong>Período:</strong> 03/10/2025 - 08/10/2025</p>
-                        <p class="text-muted"><strong>Crédito:</strong> Sim</p>
+                        <h5>Aluguel #<span th:text="${aluguel.id}"></span></h5>
+                        <p class="text-muted"><strong>Cliente:</strong> <span th:text="${aluguel.cliente.nome}"></span></p>
+                        <p class="text-muted"><strong>Carro:</strong> <span th:text="${aluguel.automovel.marca + ' ' + aluguel.automovel.modelo}"></span></p>
+                        <p class="text-muted"><strong>Período:</strong> <span th:text="${#temporals.format(aluguel.inicio, 'dd/MM/yyyy')}"></span> - <span th:text="${aluguel.termino != null ? #temporals.format(aluguel.termino, 'dd/MM/yyyy') : 'N/A'}"></span></p>
+                        <p class="text-muted"><strong>Valor:</strong> R$ <span th:text="${#numbers.formatDecimal(aluguel.valorTotal, 1, 2)}"></span></p>
                         <div class="d-flex justify-content-end">
-                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#reviewModal" data-request-id="10125" data-request-status="rejected">Ver Detalhes</button>
+                            <a th:href="@{/agente/alugueis/{id}(id=${aluguel.id})}" class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver Detalhes</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mensagem se não houver aluguéis -->
+                <div class="col-12 text-center" th:if="${#lists.isEmpty(alugueisPendentes) and #lists.isEmpty(alugueisAprovados) and #lists.isEmpty(alugueisNegados)}">
+                    <div class="alert alert-info"><i class="fas fa-info-circle me-2"></i>Nenhum aluguel encontrado no momento.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção de Gerenciamento de Aluguéis -->
+    <section class="page-section" id="alugueis">
+        <div class="container">
+            <div class="text-center mb-4">
+                <h2 class="section-heading text-uppercase">Gerenciar Aluguéis</h2>
+                <h3 class="section-subheading text-muted">Visualize e gerencie todos os aluguéis do sistema.</h3>
+            </div>
+
+            <!-- Botões de filtro -->
+            <div class="d-flex justify-content-center mb-4">
+                <div class="btn-group" role="group" aria-label="Filtros de Aluguéis">
+                    <a th:href="@{/agente/alugueis}" class="btn btn-primary">Todos os Aluguéis</a>
+                    <a th:href="@{/agente/alugueis/status/pendente}" class="btn btn-warning">Pendentes</a>
+                    <a th:href="@{/agente/alugueis/status/aprovado}" class="btn btn-success">Aprovados</a>
+                    <a th:href="@{/agente/alugueis/status/negado}" class="btn btn-danger">Rejeitados</a>
+                </div>
+            </div>
+
+            <!-- Resumo rápido -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary">Total</h5>
+                            <h3 th:text="${totalAlugueis}">0</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h5 class="card-title text-warning">Pendentes</h5>
+                            <h3 th:text="${totalPendentes}">0</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h5 class="card-title text-success">Aprovados</h5>
+                            <h3 th:text="${totalAprovados}">0</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h5 class="card-title text-danger">Rejeitados</h5>
+                            <h3 th:text="${totalNegados}">0</h3>
                         </div>
                     </div>
                 </div>
@@ -214,59 +251,55 @@
         </div>
     </section>
 
-    <!-- Seção de Automóveis -->
-<section class="page-section bg-light" id="cars">
-    <div class="container">
-        <div class="text-center mb-4">
-            <h2 class="section-heading text-uppercase">Frota de Automóveis</h2>
-            <h3 class="section-subheading text-muted">Gerencie os veículos disponíveis para aluguel.</h3>
-        </div>
+    <!-- Frota de Automóveis -->
+    <section class="page-section bg-light" id="cars">
+        <div class="container">
+            <div class="text-center mb-4">
+                <h2 class="section-heading text-uppercase">Frota de Automóveis</h2>
+                <h3 class="section-subheading text-muted">Gerencie os veículos disponíveis para aluguel.</h3>
+            </div>
 
-        <!-- Botão de adicionar novo carro -->
-        <div class="d-flex justify-content-end mb-3">
-            <a th:href="@{/agente/automoveis/novo}" class="btn btn-success">
-                <i class="fas fa-plus me-2"></i> Adicionar Novo Carro
-            </a>
-        </div>
+            <div class="d-flex justify-content-end mb-3">
+                <a th:href="@{/agente/automoveis/novo}" class="btn btn-success"><i class="fas fa-plus me-2"></i> Adicionar Novo Carro</a>
+            </div>
 
-        <!-- Mensagem quando não há automóveis -->
-        <div th:if="${#lists.isEmpty(automoveis)}" class="alert alert-info text-center">
-            <i class="fas fa-info-circle me-2"></i>
-            Nenhum automóvel cadastrado. 
-            <a th:href="@{/agente/automoveis/novo}" class="alert-link">Clique aqui para adicionar o primeiro automóvel.</a>
-        </div>
+            <div th:if="${#lists.isEmpty(automoveis)}" class="alert alert-info text-center">
+                <i class="fas fa-info-circle me-2"></i>
+                Nenhum automóvel cadastrado. <a th:href="@{/agente/automoveis/novo}" class="alert-link">Clique aqui para adicionar o primeiro automóvel.</a>
+            </div>
 
-            <!-- Tabela de automóveis -->
             <table th:if="${not #lists.isEmpty(automoveis)}" class="table table-striped table-hover rounded overflow-hidden">
                 <thead class="bg-primary text-light">
                     <tr>
-                        <th scope="col">Placa</th>
-                        <th scope="col">Marca</th>
-                        <th scope="col">Modelo</th>
-                        <th scope="col">Ano</th>
-                        <th scope="col">Ações</th>
+                        <th>Placa</th>
+                        <th>Marca</th>
+                        <th>Modelo</th>
+                        <th>Ano</th>
+                        <th>Matrícula</th>
+                        <th>Valor Diária</th>
+                        <th>Disponível</th>
+                        <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr th:each="automovel : ${automoveis}">
-                        <td th:text="${automovel.placa}">ABC-1234</td>
-                        <td th:text="${automovel.marca}">Ford</td>
-                        <td th:text="${automovel.modelo}">Fusion</td>
-                        <td th:text="${automovel.ano}">2023</td>
+                        <td th:text="${automovel.placa}"></td>
+                        <td th:text="${automovel.marca}"></td>
+                        <td th:text="${automovel.modelo}"></td>
+                        <td th:text="${automovel.ano}"></td>
+                        <td th:text="${automovel.matricula}"></td>
                         <td>
-                            <!-- Botão Editar -->
-                            <a th:href="@{'/agente/automoveis/editar/' + ${automovel.id}}" 
-                            class="btn btn-sm btn-info me-2" 
-                            title="Editar automóvel">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <!-- Botão Deletar -->
-                            <a th:href="@{'/agente/automoveis/deletar/' + ${automovel.id}}" 
-                            class="btn btn-sm btn-danger" 
-                            title="Excluir automóvel"
-                            onclick="return confirm('Tem certeza que deseja excluir este automóvel?')">
-                                <i class="fas fa-trash-alt"></i>
-                            </a>
+                            <strong class="text-success">R$ <span th:text="${#numbers.formatDecimal(automovel.valorDiaria, 1, 2)}">150,00</span></strong>
+                        </td>
+                        <td>
+                            <span class="badge bg-success" th:if="${automovel.disponivel}">Disponível</span>
+                            <span class="badge bg-danger" th:if="${!automovel.disponivel}">Indisponível</span>
+                        </td>
+                        <td>
+                            <a th:href="@{'/agente/automoveis/editar/' + ${automovel.id}}" class="btn btn-info btn-sm me-2"><i class="fas fa-edit"></i></a>
+                            <form th:action="@{'/agente/automoveis/deletar/' + ${automovel.id}}" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir este automóvel?')"><i class="fas fa-trash-alt"></i></button>
+                            </form>
                         </td>
                     </tr>
                 </tbody>
@@ -274,54 +307,32 @@
         </div>
     </section>
 
-    
-    <!-- Seção de Relatórios -->
+    <!-- Relatórios -->
     <section class="page-section" id="reports">
         <div class="container">
-            <div class="text-center">
+            <div class="text-center mb-4">
                 <h2 class="section-heading text-uppercase">Relatórios de Análise</h2>
                 <h3 class="section-subheading text-muted">Acompanhe o desempenho da equipe.</h3>
             </div>
             <div class="row text-center">
-                <div class="col-lg-4">
-                    <div class="card p-4">
-                        <i class="fas fa-check-circle fa-4x text-success mb-3"></i>
-                        <h5>Pedidos Aprovados</h5>
-                        <p class="lead">56</p>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                     <div class="card p-4">
-                        <i class="fas fa-times-circle fa-4x text-danger mb-3"></i>
-                        <h5>Pedidos Rejeitados</h5>
-                        <p class="lead">12</p>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                     <div class="card p-4">
-                        <i class="fas fa-clock fa-4x text-info mb-3"></i>
-                        <h5>Pedidos Pendentes</h5>
-                        <p class="lead">8</p>
-                    </div>
-                </div>
-                <div class="mt-4 text-center">
-                    <button class="btn btn-primary" onclick="alert('Funcionalidade de exportar relatórios não implementada.')">
-                        <i class="fas fa-download me-2"></i> Exportar Relatório
-                    </button>
-                </div>
+                <div class="col-lg-3"><div class="card p-4"><i class="fas fa-list fa-4x text-primary mb-3"></i><h5>Total de Aluguéis</h5><p class="lead" th:text="${totalAlugueis}">0</p></div></div>
+                <div class="col-lg-3"><div class="card p-4"><i class="fas fa-clock fa-4x text-warning mb-3"></i><h5>Pendentes</h5><p class="lead" th:text="${totalPendentes}">0</p></div></div>
+                <div class="col-lg-3"><div class="card p-4"><i class="fas fa-check-circle fa-4x text-success mb-3"></i><h5>Aprovados</h5><p class="lead" th:text="${totalAprovados}">0</p></div></div>
+                <div class="col-lg-3"><div class="card p-4"><i class="fas fa-times-circle fa-4x text-danger mb-3"></i><h5>Rejeitados</h5><p class="lead" th:text="${totalNegados}">0</p></div></div>
+                <div class="mt-4 text-center"><button class="btn btn-primary" onclick="alert('Funcionalidade de exportar relatórios não implementada.')"><i class="fas fa-download me-2"></i> Exportar Relatório</button></div>
             </div>
         </div>
     </section>
 
-    <!-- Footer-->
+    <!-- Footer -->
     <footer class="footer py-4">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-4 text-lg-start">Copyright &copy; AutoRent 2023</div>
                 <div class="col-lg-4 my-3 my-lg-0">
-                    <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                    <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                    <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-twitter"></i></a>
+                    <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-facebook-f"></i></a>
+                    <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-linkedin-in"></i></a>
                 </div>
                 <div class="col-lg-4 text-lg-end">
                     <a class="link-dark text-decoration-none me-3" href="#!">Política de Privacidade</a>
@@ -331,121 +342,85 @@
         </div>
     </footer>
 
-    <!-- MODAL: Tela de Análise de Pedido -->
+    <!-- Modals -->
+    <!-- Modal Aprovar -->
     <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="reviewModalLabel">Analisar Pedido #<span id="requestId"></span></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <h6>Detalhes do Cliente</h6>
-                    <ul class="list-group list-group-flush mb-3">
-                        <li class="list-group-item"><strong>Nome:</strong> João Silva</li>
-                        <li class="list-group-item"><strong>Email:</strong> joao.silva@email.com</li>
-                        <li class="list-group-item"><strong>Telefone:</strong> (11) 99999-9999</li>
-                        <li class="list-group-item"><strong>Documentos:</strong> <a href="#">Ver Anexos</a></li>
-                    </ul>
-                     <h6>Detalhes do Pedido</h6>
-                    <ul class="list-group list-group-flush mb-4">
-                        <li class="list-group-item"><strong>Carro:</strong> Ford Fusion</li>
-                        <li class="list-group-item"><strong>Período:</strong> 01/10/2025 - 05/10/2025</li>
-                        <li class="list-group-item"><strong>Local:</strong> São Paulo</li>
-                        <li class="list-group-item"><strong>Contrato de Crédito:</strong> Sim</li>
-                    </ul>
-                </div>
-                <div class="modal-footer" id="reviewActions">
-                    <!-- Botões dinâmicos de aprovar/rejeitar -->
-                    <button type="button" class="btn btn-success me-2" onclick="confirmAction('Deseja realmente aprovar este pedido?', 'processRequest(\'aprovado\')')">
-                        <i class="fas fa-check-circle me-1"></i> Aprovar
-                    </button>
-                    <button type="button" class="btn btn-danger" onclick="confirmAction('Deseja realmente rejeitar este pedido?', 'processRequest(\'rejeitado\')')">
-                        <i class="fas fa-times-circle me-1"></i> Rejeitar
-                    </button>
-                    <button type="button" class="btn btn-info" onclick="alert('Funcionalidade de edição não implementada.')">
-                        <i class="fas fa-edit me-1"></i> Editar
-                    </button>
-                </div>
+                <form th:action="@{/agente/alugueis/aprovar}" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="reviewModalLabel">Aprovar Aluguel</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Tem certeza que deseja aprovar este aluguel?</p>
+                        <input type="hidden" name="aluguelId" id="modalAprovarId" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-success">Aprovar</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
-    <!-- MODAL: Confirmação Customizada (substitui alert/confirm) -->
-    <div class="modal fade" id="customConfirmModal" tabindex="-1" aria-labelledby="customConfirmModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
+    <!-- Modal Rejeitar -->
+    <div class="modal fade" id="rejectionModal" tabindex="-1" aria-labelledby="rejectionModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="customConfirmModalLabel">Confirmação</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" id="customConfirmMessage"></div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
-                    <button type="button" class="btn btn-primary" id="customConfirmYes">Sim</button>
-                </div>
+                <form th:action="@{/agente/alugueis/rejeitar}" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="rejectionModalLabel">Rejeitar Aluguel</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Informe o motivo da rejeição:</p>
+                        <textarea name="motivo" class="form-control" required></textarea>
+                        <input type="hidden" name="aluguelId" id="modalRejeitarId" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-danger">Rejeitar</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
-    <!-- Bootstrap core JS e scripts de lógica -->
+    <!-- Scripts Bootstrap e JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Funções para Modais de Confirmação (substituem alert/confirm)
-        function confirmAction(message, action) {
-            var modal = new bootstrap.Modal(document.getElementById('customConfirmModal'));
-            document.getElementById('customConfirmMessage').innerHTML = message;
-            document.getElementById('customConfirmYes').onclick = function() {
-                modal.hide();
-                eval(action); // Executa a ação confirmada
-            };
-            modal.show();
-        }
+        // Filtrar cards de pedidos
+        const filterButtons = document.querySelectorAll('.btn-group button');
+        const cards = document.querySelectorAll('.request-card');
 
-        function processRequest(status) {
-            console.log("Pedido processado com status: " + status);
-            var modal = bootstrap.Modal.getInstance(document.getElementById('reviewModal'));
-            modal.hide();
-            // Lógica para atualizar a lista de pedidos aqui
-        }
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
 
-        // Lógica do Modal de Análise de Pedido
-        var reviewModal = document.getElementById('reviewModal');
-        reviewModal.addEventListener('show.bs.modal', function(event) {
-            var button = event.relatedTarget;
-            var requestId = button.getAttribute('data-request-id');
-            var requestStatus = button.getAttribute('data-request-status');
-            
-            this.querySelector('#requestId').textContent = requestId;
-            var reviewActions = this.querySelector('#reviewActions');
-            
-            // Oculta/mostra botões com base no status do pedido
-            if (requestStatus === 'pending') {
-                reviewActions.style.display = 'block';
-            } else {
-                reviewActions.style.display = 'none';
-            }
-        });
-
-        // Lógica para filtrar a listagem de pedidos
-        var filterButtons = document.querySelectorAll('.btn-group button[data-filter]');
-        filterButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                // Atualiza o estado dos botões de filtro
-                filterButtons.forEach(btn => btn.classList.remove('active'));
-                this.classList.add('active');
-
-                var filter = this.getAttribute('data-filter');
-                var requestCards = document.querySelectorAll('.request-card');
-                
-                requestCards.forEach(card => {
-                    if (filter === 'all' || card.classList.contains(filter)) {
-                        card.style.display = 'block';
-                    } else {
-                        card.style.display = 'none';
-                    }
+                const filter = btn.getAttribute('data-filter');
+                cards.forEach(card => {
+                    if(filter === 'all' || card.classList.contains(filter)) card.style.display = 'block';
+                    else card.style.display = 'none';
                 });
             });
+        });
+
+        // Abrir modais
+        const reviewModal = document.getElementById('reviewModal');
+        reviewModal.addEventListener('show.bs.modal', event => {
+            const button = event.relatedTarget;
+            const aluguelId = button.getAttribute('data-request-id');
+            document.getElementById('modalAprovarId').value = aluguelId;
+        });
+
+        const rejectionModal = document.getElementById('rejectionModal');
+        rejectionModal.addEventListener('show.bs.modal', event => {
+            const button = event.relatedTarget;
+            const aluguelId = button.getAttribute('data-request-id');
+            document.getElementById('modalRejeitarId').value = aluguelId;
         });
     </script>
 </body>

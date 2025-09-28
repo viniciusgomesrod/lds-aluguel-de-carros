@@ -13,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,6 +28,9 @@ public class clienteController {
 
     @Autowired
     private automovelService automovelService;
+
+    @Autowired
+    private Codigo.Backend.repositories.aluguelRepository aluguelRepository;
 
     // Formulário de cadastro
     @GetMapping("/cadastro")
@@ -86,14 +88,17 @@ public class clienteController {
     public String criarAluguel(@ModelAttribute Aluguel aluguel,
             @RequestParam Long automovelId,
             Principal principal) {
-        aluguel.setStatus(StatusAluguel.PENDENTE);
-        aluguel.setInicio(LocalDateTime.now());
-        // Aqui você precisa obter o cliente logado pelo Principal
-        Cliente cliente = clienteServices.obterClientePorCPF(principal.getName());
-        aluguel.setCliente(cliente);
+        try {
+            aluguel.setStatus(StatusAluguel.PENDENTE);
+            // Aqui você precisa obter o cliente logado pelo Principal
+            Cliente cliente = clienteServices.obterClientePorEmail(principal.getName());
+            aluguel.setCliente(cliente);
 
-        aluguelService.criarAluguel(aluguel, automovelId);
-        return "redirect:/clientes/automoveis?success=Reserva+criada+com+sucesso";
+            aluguelService.criarAluguel(aluguel, automovelId);
+            return "redirect:/clientes/automoveis?success=Reserva+criada+com+sucesso";
+        } catch (Exception e) {
+            return "redirect:/clientes/automoveis?error=Erro+ao+criar+reserva:+" + e.getMessage();
+        }
     }
 
     // Cancelar aluguel
@@ -101,6 +106,17 @@ public class clienteController {
     public String cancelarAluguel(@PathVariable Long id) {
         aluguelService.cancelarAluguel(id);
         return "redirect:/clientes/automoveis?success=Reserva+cancelada+com+sucesso";
+    }
+
+    // Listar aluguéis do cliente
+    @GetMapping("/alugueis")
+    public String listarAlugueisCliente(Principal principal, Model model) {
+        Cliente cliente = clienteServices.obterClientePorEmail(principal.getName());
+        if (cliente != null) {
+            List<Aluguel> alugueis = aluguelService.obterAlugueisPorUsuario(cliente.getId());
+            model.addAttribute("alugueis", alugueis);
+        }
+        return "cliente/listar-alugueis";
     }
 
     // Visualizar detalhes de um aluguel específico
@@ -121,7 +137,7 @@ public class clienteController {
             return "redirect:/clientes/automoveis?error=Cliente+não+encontrado";
         }
         model.addAttribute("cliente", cliente);
-        return "cliente/editar-cliente"; // nova página HTML
+        return "cliente/editar-conta"; // nova página HTML
     }
 
     // Atualizar cliente
@@ -137,14 +153,33 @@ public class clienteController {
     }
 
     // Excluir cliente
+    // Exemplo de como ficaria a lógica na sua ClienteController:
+
     @PostMapping("/excluir/{id}")
     public String excluirCliente(@PathVariable Long id) {
         try {
+            // 1. Busque todos os aluguéis do cliente
+            List<Aluguel> alugueis = aluguelRepository.findByCliente_Id(id);
+
+            // 2. Verifique se há aluguéis "ativos" (Status APROVADO ou PENDENTE, por exemplo)
+            boolean temAluguelAtivo = alugueis.stream()
+                .anyMatch(aluguel -> "APROVADO".equals(aluguel.getStatus()) || "PENDENTE".equals(aluguel.getStatus()));
+
+            if (temAluguelAtivo) {
+                // REDIRECIONAMENTO COM PARÂMETRO 'error' (MENSAGEM URL ENCODED)
+                return "redirect:/dashboardCliente?error=Não+é+possível+excluir+a+conta+com+aluguéis+ativos.";
+            }
+            
+            // Se não houver aluguéis ativos
             clienteServices.deletarCliente(id);
             return "redirect:/login?success=Conta+excluída+com+sucesso";
+            
         } catch (Exception e) {
-            return "redirect:/clientes/editar/" + id + "?error=Erro+ao+excluir";
+            // Logar o erro e retornar mensagem genérica
+            return "redirect:/dashboardCliente?error=Erro+ao+excluir+a+conta";
         }
     }
+
+    
 
 }

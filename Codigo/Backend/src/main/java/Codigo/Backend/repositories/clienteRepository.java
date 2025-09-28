@@ -10,6 +10,6 @@ import Codigo.Backend.models.Cliente;
 
 @Repository
 public interface clienteRepository extends JpaRepository<Cliente, Long> {
-    Cliente findByCPF(String cpf);
+    Optional<Cliente> findByCPF(String cpf);
     Optional<Cliente> findByEmail(String email);
 }
