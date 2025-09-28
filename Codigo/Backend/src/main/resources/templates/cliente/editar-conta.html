@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Conta - AutoRent</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Slab:wght@400&display=swap" rel="stylesheet">
+
+    <style>
+        /* Paleta e fontes */
+        :root {
+            --ar-dark-blue: #212529;
+            --ar-gray-text: #adb5bd;
+            --ar-light-text: #f8f9fa;
+            --ar-primary-orange: #f06b4a;
+            --ar-primary-orange-hover: #d15a3e;
+            --ar-input-bg: #343a40;
+            --ar-border-color: #495057;
+
+            --bs-body-font-family: "Roboto Slab", serif;
+            --bs-heading-font-family: "Montserrat", sans-serif;
+            --bs-border-radius-sm: 0.25rem;
+            --bs-border-radius-lg: 0.5rem;
+        }
+
+        body {
+            margin: 0;
+            font-family: var(--bs-body-font-family);
+            color: var(--ar-light-text);
+            background-color: var(--ar-dark-blue);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .card-container {
+            width: 100%;
+            max-width: 500px;
+            background-color: #2b3035;
+            padding: 40px;
+            border-radius: var(--bs-border-radius-lg);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-header h1 {
+            font-family: var(--bs-heading-font-family);
+            font-weight: 700;
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-family: var(--bs-heading-font-family);
+            font-weight: 700;
+            color: var(--ar-gray-text);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.85rem;
+            font-size: 1rem;
+            border: 1px solid var(--ar-border-color);
+            border-radius: var(--bs-border-radius-sm);
+            background-color: var(--ar-input-bg);
+            color: var(--ar-light-text);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--ar-primary-orange);
+            box-shadow: 0 0 0 0.25rem rgba(240, 107, 74, 0.25);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 0.9rem;
+            font-family: var(--bs-heading-font-family);
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--ar-light-text);
+            background-color: var(--ar-primary-orange);
+            border: none;
+            border-radius: var(--bs-border-radius-sm);
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            margin-top: 1rem;
+        }
+
+        .btn-submit:hover {
+            background-color: var(--ar-primary-orange-hover);
+        }
+
+        .btn-delete {
+            width: 100%;
+            padding: 0.9rem;
+            font-family: var(--bs-heading-font-family);
+            font-size: 1rem;
+            font-weight: 700;
+            color: #fff;
+            background-color: #dc3545;
+            border: none;
+            border-radius: var(--bs-border-radius-sm);
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            margin-top: 1rem;
+        }
+
+        .btn-delete:hover {
+            background-color: #bb2d3b;
+        }
+
+        .alert {
+            margin-bottom: 1rem;
+            padding: 10px;
+            color: #d8000c;
+            background-color: #ffd2d2;
+            border-radius: var(--bs-border-radius-sm);
+            text-align: center;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="card-container">
+        <div class="card-header">
+            <h1>Gerenciar Minha Conta</h1>
+        </div>
+
+        <div th:if="${mensagem}" class="alert">
+            <p th:text="${mensagem}"></p>
+        </div>
+
+        <form th:action="@{/clientes/atualizar}" th:object="${cliente}" method="post">
+            <input type="hidden" th:field="*{id}">
+
+            <div class="form-group">
+                <label>Nome</label>
+                <input type="text" th:field="*{nome}" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label>CPF</label>
+                <input type="text" th:field="*{CPF}" class="form-control" readonly>
+            </div>
+
+            <div class="form-group">
+                <label>RG</label>
+                <input type="text" th:field="*{rg}" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" th:field="*{email}" class="form-control" readonly>
+            </div>
+
+            <div class="form-group">
+                <label>Telefone</label>
+                <input type="text" th:field="*{telefone}" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label>Profissão</label>
+                <input type="text" th:field="*{profissao}" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label>Nova Senha</label>
+                <input type="password" th:field="*{senha}" class="form-control" placeholder="Digite nova senha">
+            </div>
+
+            <button type="submit" class="btn-submit">Salvar Alterações</button>
+        </form>
+
+        <form th:action="@{/clientes/excluir/{id}(id=${cliente.id})}" method="post">
+            <button type="submit" class="btn-delete">Excluir Conta</button>
+        </form>
+    </div>
+</body>
+</html>

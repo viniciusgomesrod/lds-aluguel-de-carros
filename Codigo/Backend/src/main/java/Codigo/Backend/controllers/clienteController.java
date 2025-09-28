@@ -84,8 +84,8 @@ public class clienteController {
     // Processar criação de aluguel
     @PostMapping("/alugueis/criar")
     public String criarAluguel(@ModelAttribute Aluguel aluguel,
-                               @RequestParam Long automovelId,
-                               Principal principal) {
+            @RequestParam Long automovelId,
+            Principal principal) {
         aluguel.setStatus(StatusAluguel.PENDENTE);
         aluguel.setInicio(LocalDateTime.now());
         // Aqui você precisa obter o cliente logado pelo Principal
@@ -110,4 +110,41 @@ public class clienteController {
         model.addAttribute("aluguel", aluguel);
         return "cliente/detalhes-aluguel";
     }
+
+    // MÉTODOS PARA TELA EDITAR E EXCLUIR CONTA
+
+    // Abrir formulário de edição
+    @GetMapping("/editar/{id}")
+    public String editarCliente(@PathVariable Long id, Model model) {
+        Cliente cliente = clienteServices.obterClientePorId(id);
+        if (cliente == null) {
+            return "redirect:/clientes/automoveis?error=Cliente+não+encontrado";
+        }
+        model.addAttribute("cliente", cliente);
+        return "cliente/editar-cliente"; // nova página HTML
+    }
+
+    // Atualizar cliente
+    @PostMapping("/atualizar")
+    public String atualizarCliente(@ModelAttribute Cliente cliente, Model model) {
+        try {
+            clienteServices.atualizarCliente(cliente);
+            return "redirect:/clientes/automoveis?success=Dados+atualizados+com+sucesso";
+        } catch (Exception e) {
+            model.addAttribute("mensagem", "Erro ao atualizar: " + e.getMessage());
+            return "cliente/editar-cliente";
+        }
+    }
+
+    // Excluir cliente
+    @PostMapping("/excluir/{id}")
+    public String excluirCliente(@PathVariable Long id) {
+        try {
+            clienteServices.deletarCliente(id);
+            return "redirect:/login?success=Conta+excluída+com+sucesso";
+        } catch (Exception e) {
+            return "redirect:/clientes/editar/" + id + "?error=Erro+ao+excluir";
+        }
+    }
+
 }
