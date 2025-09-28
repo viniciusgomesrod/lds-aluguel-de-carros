@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -93,13 +93,25 @@
         .page-section {
             padding: 6rem 0;
         }
+
+        .alert-success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
     </style>
 </head>
 <body id="page-top">
     <!-- Navigation-->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
         <div class="container">
-            <a class="navbar-brand" href="#page-top">
+            <a class="navbar-brand" th:href="@{/agente}">
                 <h3>AutoRent - Agente</h3>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -111,7 +123,13 @@
                     <li class="nav-item"><a class="nav-link" href="#requests">Pedidos Pendentes</a></li>
                     <li class="nav-item"><a class="nav-link" href="#cars">Automóveis</a></li>
                     <li class="nav-item"><a class="nav-link" href="#reports">Relatórios</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#logout" onclick="alert('Funcionalidade de sair não implementada.')">Sair</a></li>
+                    <li class="nav-item">
+                        <form th:action="@{/logout}" method="post" style="display: inline;">
+                            <button type="submit" class="nav-link btn btn-link" style="border: none; background: none;">
+                                Sair
+                            </button>
+                        </form>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -124,6 +142,19 @@
             <p class="text-muted mt-3">Gerencie pedidos e a frota de automóveis.</p>
         </div>
     </header>
+
+    <!-- Alertas de Sucesso/Erro -->
+    <div th:if="${param.success}" class="alert alert-success alert-dismissible fade show m-3" role="alert">
+        <i class="fas fa-check-circle me-2"></i>
+        <span th:text="${param.success}">Operação realizada com sucesso!</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div th:if="${param.error}" class="alert alert-danger alert-dismissible fade show m-3" role="alert">
+        <i class="fas fa-exclamation-circle me-2"></i>
+        <span th:text="${param.error}">Erro ao realizar operação!</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
 
     <!-- Pedidos Pendentes Section -->
     <section class="page-section" id="requests">
@@ -184,18 +215,29 @@
     </section>
 
     <!-- Seção de Automóveis -->
-    <section class="page-section bg-light" id="cars">
-        <div class="container">
-            <div class="text-center">
-                <h2 class="section-heading text-uppercase">Frota de Automóveis</h2>
-                <h3 class="section-subheading text-muted">Gerencie os veículos disponíveis para aluguel.</h3>
-            </div>
-            <div class="d-flex justify-content-end mb-3">
-                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#carModal" data-action="add">
-                    <i class="fas fa-plus me-2"></i> Adicionar Novo Carro
-                </button>
-            </div>
-            <table class="table table-striped table-hover rounded overflow-hidden">
+<section class="page-section bg-light" id="cars">
+    <div class="container">
+        <div class="text-center mb-4">
+            <h2 class="section-heading text-uppercase">Frota de Automóveis</h2>
+            <h3 class="section-subheading text-muted">Gerencie os veículos disponíveis para aluguel.</h3>
+        </div>
+
+        <!-- Botão de adicionar novo carro -->
+        <div class="d-flex justify-content-end mb-3">
+            <a th:href="@{/agente/automoveis/novo}" class="btn btn-success">
+                <i class="fas fa-plus me-2"></i> Adicionar Novo Carro
+            </a>
+        </div>
+
+        <!-- Mensagem quando não há automóveis -->
+        <div th:if="${#lists.isEmpty(automoveis)}" class="alert alert-info text-center">
+            <i class="fas fa-info-circle me-2"></i>
+            Nenhum automóvel cadastrado. 
+            <a th:href="@{/agente/automoveis/novo}" class="alert-link">Clique aqui para adicionar o primeiro automóvel.</a>
+        </div>
+
+            <!-- Tabela de automóveis -->
+            <table th:if="${not #lists.isEmpty(automoveis)}" class="table table-striped table-hover rounded overflow-hidden">
                 <thead class="bg-primary text-light">
                     <tr>
                         <th scope="col">Placa</th>
@@ -206,38 +248,32 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr data-placa="ABC1D23">
-                        <td>ABC-1D23</td>
-                        <td>Hyundai</td>
-                        <td>HB20</td>
-                        <td>2022</td>
+                    <tr th:each="automovel : ${automoveis}">
+                        <td th:text="${automovel.placa}">ABC-1234</td>
+                        <td th:text="${automovel.marca}">Ford</td>
+                        <td th:text="${automovel.modelo}">Fusion</td>
+                        <td th:text="${automovel.ano}">2023</td>
                         <td>
-                            <button type="button" class="btn btn-sm btn-info me-2" data-bs-toggle="modal" data-bs-target="#carModal" data-action="edit" data-placa="ABC1D23">
+                            <!-- Botão Editar -->
+                            <a th:href="@{'/agente/automoveis/editar/' + ${automovel.id}}" 
+                            class="btn btn-sm btn-info me-2" 
+                            title="Editar automóvel">
                                 <i class="fas fa-edit"></i>
-                            </button>
-                            <button type="button" class="btn btn-sm btn-danger" onclick="confirmAction('Deseja realmente excluir este carro?', 'deleteCar(\'ABC1D23\')')">
+                            </a>
+                            <!-- Botão Deletar -->
+                            <a th:href="@{'/agente/automoveis/deletar/' + ${automovel.id}}" 
+                            class="btn btn-sm btn-danger" 
+                            title="Excluir automóvel"
+                            onclick="return confirm('Tem certeza que deseja excluir este automóvel?')">
                                 <i class="fas fa-trash-alt"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr data-placa="XYZ9E87">
-                        <td>XYZ-9E87</td>
-                        <td>Jeep</td>
-                        <td>Renegade</td>
-                        <td>2023</td>
-                        <td>
-                            <button type="button" class="btn btn-sm btn-info me-2" data-bs-toggle="modal" data-bs-target="#carModal" data-action="edit" data-placa="XYZ9E87">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button type="button" class="btn btn-sm btn-danger" onclick="confirmAction('Deseja realmente excluir este carro?', 'deleteCar(\'XYZ9E87\')')">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
+                            </a>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </section>
+
     
     <!-- Seção de Relatórios -->
     <section class="page-section" id="reports">
@@ -335,44 +371,6 @@
         </div>
     </div>
 
-    <!-- MODAL: Adicionar/Editar Carro -->
-    <div class="modal fade" id="carModal" tabindex="-1" aria-labelledby="carModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="carModalLabel">Adicionar Automóvel</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="carForm">
-                        <input type="hidden" id="carAction" value="add">
-                        <input type="hidden" id="carOriginalPlaca">
-                        <div class="mb-3">
-                            <label for="carPlaca" class="form-label">Placa</label>
-                            <input type="text" class="form-control" id="carPlaca" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="carMarca" class="form-label">Marca</label>
-                            <input type="text" class="form-control" id="carMarca" required>
-                        </div>
-                         <div class="mb-3">
-                            <label for="carModelo" class="form-label">Modelo</label>
-                            <input type="text" class="form-control" id="carModelo" required>
-                        </div>
-                         <div class="mb-3">
-                            <label for="carAno" class="form-label">Ano</label>
-                            <input type="number" class="form-control" id="carAno" required>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary" form="carForm">Salvar Carro</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- MODAL: Confirmação Customizada (substitui alert/confirm) -->
     <div class="modal fade" id="customConfirmModal" tabindex="-1" aria-labelledby="customConfirmModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-sm">
@@ -449,43 +447,6 @@
                 });
             });
         });
-
-        // Lógica do Modal de Adicionar/Editar Carro
-        var carModal = document.getElementById('carModal');
-        carModal.addEventListener('show.bs.modal', function(event) {
-            var button = event.relatedTarget;
-            var action = button.getAttribute('data-action');
-            var modalTitle = this.querySelector('#carModalLabel');
-            var carForm = this.querySelector('#carForm');
-            
-            // Limpa campos do formulário
-            carForm.reset();
-            
-            if (action === 'add') {
-                modalTitle.textContent = 'Adicionar Novo Automóvel';
-                this.querySelector('#carAction').value = 'add';
-                this.querySelector('#carPlaca').removeAttribute('readonly');
-            } else if (action === 'edit') {
-                modalTitle.textContent = 'Editar Automóvel';
-                this.querySelector('#carAction').value = 'edit';
-                
-                var placa = button.getAttribute('data-placa');
-                var row = document.querySelector(`tr[data-placa="${placa}"]`);
-                
-                this.querySelector('#carOriginalPlaca').value = placa;
-                this.querySelector('#carPlaca').value = row.cells[0].textContent.replace('-', '');
-                this.querySelector('#carPlaca').setAttribute('readonly', true);
-                this.querySelector('#carMarca').value = row.cells[1].textContent;
-                this.querySelector('#carModelo').value = row.cells[2].textContent;
-                this.querySelector('#carAno').value = row.cells[3].textContent;
-            }
-        });
-
-        // Simula a função de exclusão
-        function deleteCar(placa) {
-            console.log("Carro com placa " + placa + " excluído.");
-            // Lógica para remover a linha da tabela aqui
-        }
     </script>
 </body>
 </html>

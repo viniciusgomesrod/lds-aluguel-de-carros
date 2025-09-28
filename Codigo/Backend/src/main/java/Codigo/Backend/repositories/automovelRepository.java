@@ -26,5 +26,8 @@ public interface automovelRepository extends JpaRepository<Automovel, Long> {
     
     // Encontrar automóveis por marca e modelo
     List<Automovel> findByMarcaAndModelo(String marca, String modelo);
+
+     // Método para buscar apenas automóveis disponíveis
+    List<Automovel> findByDisponivelTrue();
     
 }

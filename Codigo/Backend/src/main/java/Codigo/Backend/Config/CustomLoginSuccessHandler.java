@@ -18,26 +18,17 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
 
-        // Verifica a role do usuário logado
-        boolean isCliente = false;
-        boolean isAgente = false;
-
+        String redirectUrl = "/login"; // fallback
         for (GrantedAuthority auth : authentication.getAuthorities()) {
-            if (auth.getAuthority().equals("ROLE_CLIENTE")) {
-                isCliente = true;
+            String role = auth.getAuthority();
+            if (role.equals("ROLE_CLIENTE")) {
+                redirectUrl = "/dashboardCliente";
                 break;
-            } else if (auth.getAuthority().equals("ROLE_AGENTE")) {
-                isAgente = true;
+            } else if (role.equals("ROLE_AGENTE")) {
+                redirectUrl = "/dashboardAgente";
                 break;
             }
         }
-
-        if (isCliente) {
-            response.sendRedirect("/dashboardCliente");
-        } else if (isAgente) {
-            response.sendRedirect("/dashboardAgente");
-        } else {
-            response.sendRedirect("/login"); // fallback
-        }
+        response.sendRedirect(redirectUrl);
     }
 }

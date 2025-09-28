@@ -106,4 +106,9 @@ public class automovelService {
     public boolean automovelExiste(Long id) {
         return automovelRepository.existsById(id);
     }
+
+    public List<Automovel> listarAutomoveisDisponiveis() {
+    return automovelRepository.findByDisponivelTrue();
+}
+
 }

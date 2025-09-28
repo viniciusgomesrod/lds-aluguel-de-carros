@@ -1,37 +1,38 @@
 package Codigo.Backend.controllers;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import Codigo.Backend.Services.aluguelService;
+import Codigo.Backend.Services.automovelService;
 import Codigo.Backend.Services.clienteService;
+import Codigo.Backend.models.Aluguel;
+import Codigo.Backend.models.Automovel;
 import Codigo.Backend.models.Cliente;
-
-import java.util.Arrays;
-import java.util.List;
-
+import Codigo.Backend.models.StatusAluguel;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 
-
+import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 
 @Controller
 @RequestMapping("/clientes")
 public class clienteController {
-    
+
     @Autowired
     private clienteService clienteServices;
 
+    @Autowired
+    private aluguelService aluguelService;
+
+    @Autowired
+    private automovelService automovelService;
+
+    // Formulário de cadastro
     @GetMapping("/cadastro")
-    public String abrirFormulario(Model model){
+    public String abrirFormulario(Model model) {
         Cliente novoCliente = new Cliente();
         List<Double> rendimentosIniciais = Arrays.asList(null, null, null);
         novoCliente.setRendimentosAuferidos(rendimentosIniciais);
@@ -39,6 +40,7 @@ public class clienteController {
         return "cadastro";
     }
 
+    // Criar cliente
     @PostMapping("/criar")
     public String criarCliente(@ModelAttribute Cliente cliente, Model model) {
         try {
@@ -48,39 +50,64 @@ public class clienteController {
             List<Double> rendimentosIniciais = Arrays.asList(null, null, null);
             novoCliente.setRendimentosAuferidos(rendimentosIniciais);
             model.addAttribute("cliente", novoCliente);
-           
         } catch (Exception e) {
-             model.addAttribute("mensagem", "Erro ao cadastrar cliente: " + e.getMessage());
+            model.addAttribute("mensagem", "Erro ao cadastrar cliente: " + e.getMessage());
         }
         return "cadastro";
     }
 
-    @GetMapping("/obter/{id}")
-    public ResponseEntity<Cliente> obterClienteId(Long id) {
-        try {
-            clienteServices.obterClientePorId(id);
-            return ResponseEntity.status(201).body(clienteServices.obterClientePorId(id));
-        } catch (Exception e) {
-            throw new RuntimeException("Não foi possível encontrar o cliente com o ID fornecido.");
-        }
+    // Listar todos os automóveis disponíveis
+    @GetMapping("/automoveis")
+    public String listarAutomoveisDisponiveis(Model model) {
+        List<Automovel> automoveis = automovelService.listarAutomoveisDisponiveis();
+        model.addAttribute("automoveis", automoveis);
+        return "cliente/listar-automoveis";
     }
 
-    @PutMapping("/atualizar")
-    public String atualizarCliente(@RequestParam String CPF, @RequestBody Cliente cliente) {
-        try {
-            clienteServices.atualizarCliente(cliente);
-            return "Cliente atualizado com sucesso.";
-        } catch (Exception e) {
-            throw new RuntimeException("Não foi possível atualizar o cliente com o CPF fornecido.");
-        }
+    // Visualizar detalhes de um automóvel específico
+    @GetMapping("/automoveis/{id}")
+    public String visualizarAutomovel(@PathVariable Long id, Model model) {
+        Automovel automovel = automovelService.obterAutomovelPorId(id);
+        model.addAttribute("automovel", automovel);
+        return "cliente/detalhes-automovel";
     }
 
-    @DeleteMapping("/deletar/{id}")
-    public ResponseEntity<Void> deletarCliente(@PathVariable Long id) {
-        clienteServices.deletarCliente(id);
-        return ResponseEntity.noContent().build();
+    // Formulário para criar novo aluguel
+    @GetMapping("/automoveis/{id}/alugar")
+    public String formularioAluguel(@PathVariable Long id, Model model) {
+        Automovel automovel = automovelService.obterAutomovelPorId(id);
+        model.addAttribute("automovel", automovel);
+        model.addAttribute("aluguel", new Aluguel());
+        return "cliente/formulario-aluguel";
     }
-    
-    
-    
+
+    // Processar criação de aluguel
+    @PostMapping("/alugueis/criar")
+    public String criarAluguel(@ModelAttribute Aluguel aluguel,
+                               @RequestParam Long automovelId,
+                               Principal principal) {
+        aluguel.setStatus(StatusAluguel.PENDENTE);
+        aluguel.setInicio(LocalDateTime.now());
+        // Aqui você precisa obter o cliente logado pelo Principal
+        Cliente cliente = clienteServices.obterClientePorCPF(principal.getName());
+        aluguel.setCliente(cliente);
+
+        aluguelService.criarAluguel(aluguel, automovelId);
+        return "redirect:/clientes/automoveis?success=Reserva+criada+com+sucesso";
+    }
+
+    // Cancelar aluguel
+    @PostMapping("/alugueis/{id}/cancelar")
+    public String cancelarAluguel(@PathVariable Long id) {
+        aluguelService.cancelarAluguel(id);
+        return "redirect:/clientes/automoveis?success=Reserva+cancelada+com+sucesso";
+    }
+
+    // Visualizar detalhes de um aluguel específico
+    @GetMapping("/alugueis/{id}")
+    public String visualizarAluguel(@PathVariable Long id, Model model) {
+        Aluguel aluguel = aluguelService.obterAluguelPorId(id);
+        model.addAttribute("aluguel", aluguel);
+        return "cliente/detalhes-aluguel";
+    }
 }

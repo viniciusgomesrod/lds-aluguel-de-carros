@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoRent - Alugar <span th:text="${automovel.marca + ' ' + automovel.modelo}">Carro</span></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://use.fontawesome.com/releases/v6.3.0/css/all.css" rel="stylesheet">
+    <style>
+        :root { 
+            --primary: #2c3e50; 
+            --secondary: #e74c3c; 
+        }
+        
+        .btn-primary { 
+            background-color: var(--secondary); 
+            border-color: var(--secondary); 
+        }
+        
+        .car-summary {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 2rem;
+            height: 100%;
+        }
+        
+        .form-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .price-calculator {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" th:href="@{/}">
+                <h4>AutoRent</h4>
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" th:href="@{/clientes/automoveis}">
+                    <i class="fas fa-arrow-left me-1"></i> Voltar para Carros
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <!-- Formulário de Aluguel -->
+            <div class="col-lg-8">
+                <div class="form-section">
+                    <h2 class="mb-4">
+                        <i class="fas fa-car me-2"></i>
+                        Alugar <span th:text="${automovel.marca + ' ' + automovel.modelo}">Carro</span>
+                    </h2>
+                    
+                    <form th:action="@{/clientes/alugueis/criar}" method="post" th:object="${aluguel}">
+                        <input type="hidden" name="automovelId" th:value="${automovel.id}">
+                        
+                        <!-- Datas do Aluguel -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <label for="dataRetirada" class="form-label fw-bold">
+                                    <i class="fas fa-calendar-plus me-2"></i>Data de Retirada
+                                </label>
+                                <input type="date" 
+                                       class="form-control form-control-lg" 
+                                       id="dataRetirada"
+                                       th:field="*{dataRetirada}"
+                                       required
+                                       min="" th:attr="min=${#temporals.format(#temporals.createToday(), 'yyyy-MM-dd')}">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="dataDevolucao" class="form-label fw-bold">
+                                    <i class="fas fa-calendar-minus me-2"></i>Data de Devolução
+                                </label>
+                                <input type="date" 
+                                       class="form-control form-control-lg" 
+                                       id="dataDevolucao"
+                                       th:field="*{dataDevolucao}"
+                                       required
+                                       min="" th:attr="min=${#temporals.format(#temporals.createToday(), 'yyyy-MM-dd')}">
+                            </div>
+                        </div>
+                        
+                        <!-- Local de Retirada -->
+                        <div class="mb-4">
+                            <label for="local" class="form-label fw-bold">
+                                <i class="fas fa-map-marker-alt me-2"></i>Local de Retirada
+                            </label>
+                            <select class="form-select form-select-lg" 
+                                    id="local"
+                                    th:field="*{local}"
+                                    required>
+                                <option value="">Selecione o local de retirada</option>
+                                <option value="Loja Centro">Loja Centro</option>
+                                <option value="Loja Zona Sul">Loja Zona Sul</option>
+                                <option value="Loja Zona Norte">Loja Zona Norte</option>
+                                <option value="Aeroporto">Aeroporto</option>
+                                <option value="Shopping Center">Shopping Center</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Informações Adicionais -->
+                        <div class="mb-4">
+                            <label for="observacoes" class="form-label fw-bold">
+                                <i class="fas fa-sticky-note me-2"></i>Observações (Opcional)
+                            </label>
+                            <textarea class="form-control" 
+                                      id="observacoes"
+                                      th:field="*{observacoes}"
+                                      rows="4"
+                                      placeholder="Alguma observação especial sobre o aluguel..."></textarea>
+                        </div>
+                        
+                        <!-- Termos e Condições -->
+                        <div class="form-check mb-4">
+                            <input class="form-check-input" type="checkbox" id="termos" required>
+                            <label class="form-check-label" for="termos">
+                                Concordo com os <a href="#" data-bs-toggle="modal" data-bs-target="#termosModal">termos e condições</a> do aluguel
+                            </label>
+                        </div>
+                        
+                        <!-- Botões -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a th:href="@{/clientes/automoveis/{id}(id=${automovel.id})}" 
+                               class="btn btn-outline-secondary btn-lg me-md-2">
+                                <i class="fas fa-arrow-left me-2"></i> Voltar
+                            </a>
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-check me-2"></i> Confirmar Reserva
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Resumo do Pedido -->
+            <div class="col-lg-4">
+                <!-- Resumo do Carro -->
+                <div class="car-summary mb-4">
+                    <h4 class="mb-3">Resumo do Carro</h4>
+                    <img th:src="|https://via.placeholder.com/300x200/2c3e50/ffffff?text=${automovel.marca}+${automovel.modelo}|" 
+                         class="img-fluid rounded mb-3" 
+                         th:alt="${automovel.marca + ' ' + automovel.modelo}">
+                    
+                    <h5 th:text="${automovel.marca + ' ' + automovel.modelo}">Carro Modelo</h5>
+                    <p class="text-muted mb-2">
+                        <i class="fas fa-calendar-alt me-2"></i>
+                        Ano: <span th:text="${automovel.ano}">2023</span>
+                    </p>
+                    <p class="text-muted mb-2">
+                        <i class="fas fa-gas-pump me-2"></i>
+                        Combustível: <span th:text="${automovel.tipoCombustivel}">Flex</span>
+                    </p>
+                    <p class="text-muted mb-3">
+                        <i class="fas fa-cog me-2"></i>
+                        Transmissão: <span th:text="${automovel.transmissao}">Automático</span>
+                    </p>
+                    
+                    <div class="border-top pt-3">
+                        <h5 class="text-primary">
+                            R$ <span th:text="${#numbers.formatDecimal(automovel.precoDiaria, 1, 2)}">0,00</span>/dia
+                        </h5>
+                    </div>
+                </div>
+                
+                <!-- Calculadora de Preço -->
+                <div class="price-calculator">
+                    <h4 class="text-white mb-3">Cálculo do Aluguel</h4>
+                    <div class="mb-3">
+                        <label class="form-label text-white-50">Dias de aluguel</label>
+                        <input type="number" class="form-control" id="diasAluguel" value="1" min="1" max="30">
+                    </div>
+                    <div class="d-flex justify-content-between text-white mb-2">
+                        <span>Subtotal:</span>
+                        <span id="subtotal">R$ 0,00</span>
+                    </div>
+                    <div class="d-flex justify-content-between text-white mb-2">
+                        <span>Taxas:</span>
+                        <span id="taxas">R$ 50,00</span>
+                    </div>
+                    <div class="d-flex justify-content-between text-white fw-bold fs-5">
+                        <span>Total:</span>
+                        <span id="total">R$ 0,00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Termos -->
+    <div class="modal fade" id="termosModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Termos e Condições</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <h6>Condições do Aluguel</h6>
+                    <ul>
+                        <li>Idade mínima: 21 anos</li>
+                        <li>CNH válida obrigatória</li>
+                        <li>Cartão de crédito para caução</li>
+                        <li>Seguro básico incluído</li>
+                        <li>Quilometragem livre</li>
+                    </ul>
+                    <h6>Políticas de Cancelamento</h6>
+                    <p>Cancelamento gratuito até 24 horas antes da retirada.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Cálculo do preço
+        const precoDiaria = <span th:text="${automovel.precoDiaria}">0</span>;
+        const diasInput = document.getElementById('diasAluguel');
+        const subtotalEl = document.getElementById('subtotal');
+        const totalEl = document.getElementById('total');
+        
+        function calcularPreco() {
+            const dias = parseInt(diasInput.value) || 1;
+            const subtotal = precoDiaria * dias;
+            const taxas = 50.00;
+            const total = subtotal + taxas;
+            
+            subtotalEl.textContent = 'R$ ' + subtotal.toFixed(2).replace('.', ',');
+            totalEl.textContent = 'R$ ' + total.toFixed(2).replace('.', ',');
+        }
+        
+        diasInput.addEventListener('input', calcularPreco);
+        calcularPreco(); // Calcular inicial
+        
+        // Validação de datas
+        const dataRetirada = document.getElementById('dataRetirada');
+        const dataDevolucao = document.getElementById('dataDevolucao');
+        
+        dataRetirada.addEventListener('change', function() {
+            dataDevolucao.min = this.value;
+            if (dataDevolucao.value && dataDevolucao.value < this.value) {
+                dataDevolucao.value = '';
+            }
+        });
+    </script>
+</body>
+</html>

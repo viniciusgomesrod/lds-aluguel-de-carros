@@ -24,7 +24,13 @@ public class Aluguel {
     private LocalDateTime inicio;
     private LocalDateTime termino;
     private double valorTotal;
-    
+    @ManyToOne
+    @JoinColumn(name = "automovel_id", nullable = false)
+    private Automovel automovel;
+
+    @ManyToOne
+    @JoinColumn(name = "cliente_id", nullable = false)
+    private Cliente cliente;
     
     public void encerrar() {
         this.status = StatusAluguel.ENCERRADO;

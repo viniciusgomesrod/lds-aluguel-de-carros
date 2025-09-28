@@ -29,7 +29,7 @@ public class clienteService {
     }
 
     //metodo para obter um cliente por cpf
-    public Cliente obterClientePorCnpj(String cnpj) {
+    public Cliente obterClientePorCPF(String cnpj) {
         return clienteRepository.findByCPF(cnpj);
     }
 

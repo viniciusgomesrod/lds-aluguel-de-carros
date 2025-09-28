@@ -22,6 +22,7 @@ public class Automovel {
     private String modelo;
     private String placa;
     private double valorDiaria;
+    private boolean disponivel = true;
     
     //como no diagrama é muitos carros pra 1 usuario, usar @manytoone
 }
