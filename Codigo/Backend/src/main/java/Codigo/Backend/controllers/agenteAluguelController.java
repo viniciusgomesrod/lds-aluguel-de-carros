@@ -3,7 +3,6 @@ package Codigo.Backend.controllers;
 import Codigo.Backend.Services.aluguelService;
 import Codigo.Backend.Services.automovelService;
 import Codigo.Backend.models.Aluguel;
-import Codigo.Backend.models.Automovel;
 import Codigo.Backend.models.StatusAluguel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,8 +18,6 @@ public class agenteAluguelController {
     @Autowired
     private aluguelService aluguelService;
 
-    @Autowired
-    private automovelService automovelService;
 
     // Listar todos os aluguéis
     @GetMapping("/alugueis")

@@ -95,7 +95,7 @@
                         <li class="list-group-item d-flex justify-content-between" 
                             th:each="rendimento, iterStat : ${aluguel.cliente.rendimentosAuferidos}">
                             <span th:text="'Rendimento ' + (iterStat.index + 1)">Rendimento 1</span>
-                            <span th:if="${rendimento != null}" th:text="'R$ ' + #numbers.formatDecimal(rendimento, 1, 2)">R$ 5.000,00</span>
+                            <span th:if="${rendimento != null}">R$ <span th:text="${#numbers.formatDecimal(rendimento, 1, 2)}">5.000,00</span></span>
                             <span th:if="${rendimento == null}" class="text-muted">Não informado</span>
                         </li>
                     </ul>
