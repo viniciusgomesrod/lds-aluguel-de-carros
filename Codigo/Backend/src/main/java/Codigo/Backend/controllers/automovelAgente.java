@@ -69,9 +69,13 @@ public class automovelAgente {
         }
     }
 
-    @GetMapping("/automoveis/deletar/{id}")
+    @PostMapping("/automoveis/deletar/{id}")
     public String deletarAutomovel(@PathVariable Long id) {
-        automovelService.deletarAutomovel(id);
-        return "redirect:/agente/automoveis";
+        try {
+            automovelService.deletarAutomovel(id);
+            return "redirect:/dashboardAgente?success=Automóvel+excluído+com+sucesso";
+        } catch (Exception e) {
+            return "redirect:/dashboardAgente?error=Erro+ao+excluir+automóvel";
+        }
     }
 }
