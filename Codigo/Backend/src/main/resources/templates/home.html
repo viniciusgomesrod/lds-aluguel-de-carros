@@ -7,461 +7,660 @@
     <meta name="author" content="AutoRent" />
     <title>AutoRent - Aluguel de Carros</title>
 
-    <link rel="stylesheet" href="../static/css/styles.css">
-    <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-    <!-- Font Awesome icons (free version)-->
+    
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-    <!-- Google fonts-->
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
-    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
-    <!-- Bootstrap CSS -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700&display=swap" rel="stylesheet" type="text/css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
     <style>
+        /* --- Variáveis Globais e Estilos Base --- */
         :root {
-            --primary: #2c3e50;
-            --secondary: #e74c3c;
-            --light: #ecf0f1;
+            --primary: #2c3e50;      /* Azul escuro/Chumbo */
+            --secondary: #e74c3c;    /* Vermelho/Laranja */
+            --light: #ecf0f1;        /* Cinza bem claro */
+            --dark: #233140;         /* Um tom mais escuro do primário */
+            --white: #ffffff;
+            --text-muted: #7f8c8d;
         }
-        
-        header.masthead {
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80');
-            background-size: cover;
-            background-position: center;
-            padding: 15rem 0;
-            text-align: center;
-            color: white;
+
+        html {
+            scroll-behavior: smooth;
         }
-        
-        .btn-primary {
-            background-color: var(--secondary);
-            border-color: var(--secondary);
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--primary);
+            background-color: var(--white);
+            overflow-x: hidden; /* Prevenir scroll horizontal causado pelo AOS */
         }
-        
-        .btn-primary:hover {
-            background-color: #c0392b;
-            border-color: #c0392b;
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Roboto Slab', serif;
+            font-weight: 700;
         }
-        
-        .navbar-dark {
-            background-color: var(--primary) !important;
+
+        .page-section {
+            padding: 6rem 0;
         }
         
         .section-heading {
             color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 1rem;
         }
         
-        .card {
-            transition: transform 0.3s;
-            margin-bottom: 20px;
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-        
-        .team-member img {
-            width: 225px;
-            height: 225px;
-            object-fit: cover;
-            border: 7px solid var(--light);
-        }
-        .icon-bg{
-            color: #2c3e50;
-        }
-        .icon-fg{
-            color: #2c3e50;
-        }
-        .timeline-image {
+        .section-heading::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
             background-color: var(--secondary);
+            border-radius: 2px;
+        }
+
+        .section-subheading {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 4rem;
         }
         
+        .btn-xl {
+            padding: 1.25rem 2.5rem;
+            font-size: 1.125rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            border: none;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
+        }
+
+        /* --- Barra de Navegação com Efeito Glassmorphism --- */
+        #mainNav {
+            background-color: transparent;
+            transition: background-color 0.4s ease-in-out, backdrop-filter 0.4s ease-in-out;
+        }
+
+        #mainNav.navbar-shrink {
+            background-color: rgba(44, 62, 80, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        #mainNav .navbar-brand {
+            font-family: 'Roboto Slab', serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--secondary);
+        }
+        
+        #mainNav .navbar-nav .nav-item .nav-link {
+            color: var(--white);
+            font-weight: 600;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        #mainNav .navbar-nav .nav-item .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--secondary);
+            transition: width 0.3s ease;
+        }
+
+        #mainNav .navbar-nav .nav-item .nav-link:hover::after,
+        #mainNav .navbar-nav .nav-item .nav-link.active::after {
+            width: 100%;
+        }
+
+        /* --- Cabeçalho (Masthead) --- */
+        header.masthead {
+            background: linear-gradient(rgba(44, 62, 80, 0.7), rgba(44, 62, 80, 0.7)), url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80');
+            background-size: cover;
+            background-position: center;
+            padding: 15rem 0;
+            text-align: center;
+            color: var(--white);
+        }
+        
+        .masthead-subheading {
+            font-size: 1.75rem;
+            font-family: 'Montserrat', sans-serif;
+            font-style: italic;
+            margin-bottom: 2rem;
+        }
+        
+        .masthead-heading {
+            font-size: 4.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+        }
+        
+        /* --- Seção de Serviços --- */
+        #services .service-item {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            padding: 2rem;
+            border-radius: 8px;
+        }
+        #services .service-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        #services .fa-stack {
+            transition: transform 0.3s ease;
+            color: var(--secondary);
+            background-color: var(--light);
+            border-radius: 50%;
+            width: 7rem;
+            height: 7rem;
+            line-height: 7rem;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            font-size: 2.5rem;
+        }
+        #services .fa-stack i { color: var(--secondary); }
+        #services .service-item:hover .fa-stack {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        /* --- Seção da Frota (Portfolio) --- */
         .portfolio-item {
             overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05), 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         
-        .portfolio-item img {
-            transition: transform 0.5s;
-            height: 250px;
-            object-fit: cover;
+        .portfolio-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1), 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* --- Seção Sobre (NOVA ESTILIZAÇÃO - História Limpa) --- */
+        #about {
+            background-color: var(--light); /* Fundo claro para destacar o conteúdo */
+        }
+
+        .story-card {
+            background-color: var(--white);
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08); /* Sombra mais pronunciada */
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%; /* Garante que os cards tenham a mesma altura */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .story-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.15);
+        }
+
+        .story-card .icon-circle {
+            width: 80px;
+            height: 80px;
+            background-color: var(--secondary);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem auto;
+            font-size: 2.5rem;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+            transition: background-color 0.3s ease;
+        }
+
+        .story-card:hover .icon-circle {
+            background-color: #c0392b; /* Tom mais escuro do secundário no hover */
+        }
+
+        .story-card h4 {
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+            font-size: 1.6rem;
+        }
+
+        .story-card .year {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .story-card p {
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+
+        /* Remover os estilos antigos da timeline para garantir */
+        .timeline, .timeline::before, .timeline-image, .timeline-panel, .timeline-heading, .timeline-body {
+            all: unset;
         }
         
-        .portfolio-item:hover img {
-            transform: scale(1.1);
-        }
-        
+        /* --- Seção de Contato --- */
         #contact {
+            background-color: #ffffff; /* Trocado para branco para destacar o formulário e info */
+        }
+        .contact-info {
             background-color: var(--light);
+            padding: 2rem;
+            border-radius: 8px;
         }
-        
-        .bg-light {
-            background-color: var(--light) !important;
+        .contact-info i {
+            color: var(--secondary);
         }
-        .navbar-brand h3{
-            color: #e74c3c;
+
+        .form-floating label { color: var(--text-muted); }
+        .form-floating > .form-control:focus ~ label { color: var(--primary); }
+        .form-floating > .form-control {
+            border: none;
+            border-bottom: 2px solid #ccc;
+            border-radius: 0;
+            transition: border-color 0.3s ease;
+            background-color: var(--light); /* Fundo sutil para os inputs */
         }
-        
+        .form-floating > .form-control:focus {
+            box-shadow: none;
+            border-bottom-color: var(--secondary);
+        }
+
+        /* --- Rodapé --- */
+        .footer {
+            background-color: var(--primary);
+            color: var(--light);
+            padding: 4rem 0 1rem 0;
+        }
+        .footer h5 {
+            color: var(--white);
+            margin-bottom: 1.5rem;
+        }
+        .footer p, .footer a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+        }
+        .footer a:hover {
+            color: var(--secondary);
+        }
+        .footer .list-unstyled li {
+            margin-bottom: 0.5rem;
+        }
+        .footer-bottom {
+            border-top: 1px solid var(--dark);
+            padding-top: 1.5rem;
+            margin-top: 2rem;
+        }
     </style>
 </head>
+
 <body id="page-top">
-    <!-- Navigation-->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
         <div class="container">
-            <a class="navbar-brand" href="#page-top">
-                <h3>AutoRent</h3>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <a class="navbar-brand" href="#page-top">AutoRent</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="responsiveNav" aria-expanded="false" aria-label="Toggle navigation">
                 Menu
                 <i class="fas fa-bars ms-1"></i>
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
                     <li class="nav-item"><a class="nav-link" href="#services">Serviços</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#portfolio">Frota</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#about">Sobre</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#team">Time</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#portfolio">Nossa Frota</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">Nossa História</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#team">Nosso Time</a></li>
                     <li class="nav-item"><a class="nav-link" href="#contact">Contato</a></li>
-                    <li class="nav-item"><a class="nav-link" href="./login.html">Login</a></li>
-                    <li class="nav-item"><a class="nav-link" href="./cadastro.html">Registrar</a></li>
+                    <li class="nav-item">
+    <a class="nav-link" th:href="@{/login}">Login</a>
+</li>
+
                 </ul>
             </div>
         </div>
     </nav>
-    <!-- Masthead-->
+    
     <header class="masthead">
         <div class="container">
-            <div class="masthead-subheading">Bem-vindo à AutoRent!</div>
-            <div class="masthead-heading text-uppercase">Aluguel de Carros com Qualidade</div>
-            <a class="btn btn-primary btn-xl text-uppercase" href="#services">Saiba Mais</a>
+            <div class="masthead-subheading">Sua jornada começa aqui.</div>
+            <div class="masthead-heading text-uppercase">Liberdade e Conforto em Cada Rota</div>
+            <a class="btn btn-primary btn-xl text-uppercase" href="#portfolio">Conheça Nossos Carros</a>
         </div>
     </header>
-    <!-- Services-->
+    
     <section class="page-section" id="services">
         <div class="container">
             <div class="text-center">
-                <h2 class="section-heading text-uppercase">Serviços</h2>
-                <h3 class="section-subheading text-muted">Oferecemos as melhores opções para suas necessidades de mobilidade.</h3>
+                <h2 class="section-heading text-uppercase">Nossos Serviços</h2>
+                <h3 class="section-subheading text-muted">Soluções completas de mobilidade pensadas para cada uma de suas necessidades.</h3>
             </div>
             <div class="row text-center">
-                <div class="col-md-4">
+                <div class="col-md-4 service-item" data-aos="fade-up" data-aos-delay="100">
                     <span class="fa-stack fa-4x">
-                        <i class="fas fa-circle fa-stack-2x icon-bg"></i>
-                        <i class="fas fa-car fa-stack-1x icon-fg"></i>
+                        <i class="fas fa-car"></i>
                     </span>
-                    <h4 class="my-3">Aluguel Diário</h4>
-                    <p class="text-muted">Carros para uso diário com preços acessíveis e diversas categorias para escolher.</p>
+                    <h4 class="my-3">Aluguel Flexível</h4>
+                    <p class="text-muted">Ideal para viagens rápidas, passeios de fim de semana ou para substituir seu carro na oficina. Escolha entre diárias, semanais ou pacotes personalizados com total flexibilidade e sem burocracia.</p>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 service-item" data-aos="fade-up" data-aos-delay="200">
                     <span class="fa-stack fa-4x">
-                        <i class="fas fa-circle fa-stack-2fx icon-bg"></i>
-                        <i class="fas fa-car fa-stack-1x icon-fg"></i>
+                        <i class="fas fa-calendar-alt"></i>
                     </span>
-                    <h4 class="my-3">Longo Período</h4>
-                    <p class="text-muted">Planos especiais para aluguel mensal ou trimestral com descontos exclusivos.</p>
+                    <h4 class="my-3">Assinatura Mensal</h4>
+                    <p class="text-muted">A alternativa inteligente a ter um carro. Com nossa assinatura, você tem um veículo 0km à sua disposição, com seguro, manutenção e documentação inclusos. Liberdade total, zero preocupação.</p>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 service-item" data-aos="fade-up" data-aos-delay="300">
                     <span class="fa-stack fa-4x">
-                        <i class="fas fa-circle fa-stack-2x icon-bg"></i>
-                        <i class="fas fa-car fa-stack-1x icon-fg"></i>
+                        <i class="fas fa-building"></i>
                     </span>
-                    <h4 class="my-3">Frota Empresarial</h4>
-                    <p class="text-muted">Soluções completas para empresas de todos os portes com gestão integrada.</p>
+                    <h4 class="my-3">Soluções Corporativas</h4>
+                    <p class="text-muted">Otimize a logística da sua empresa com nossa gestão de frotas. Reduza custos, aumente a eficiência e garanta que sua equipe tenha sempre o veículo certo para cada demanda, com suporte 24/7.</p>
                 </div>
             </div>
         </div>
     </section>
-    <!-- Portfolio Grid-->
+    
     <section class="page-section bg-light" id="portfolio">
         <div class="container">
             <div class="text-center">
                 <h2 class="section-heading text-uppercase">Nossa Frota</h2>
-                <h3 class="section-subheading text-muted">Carros modernos, confortáveis e bem conservados.</h3>
+                <h3 class="section-subheading text-muted">Veículos novos, seguros e equipados para garantir a melhor experiência.</h3>
             </div>
             <div class="row">
-                <div class="col-lg-4 col-sm-6 mb-4">
-                    <!-- Portfolio item 1-->
+                <div class="col-lg-4 col-sm-6 mb-4" data-aos="zoom-in">
                     <div class="portfolio-item">
-                        <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal1">
-                            <div class="portfolio-hover">
-                                <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
-                            </div>
-                            <img class="img-fluid" src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80" alt="Carro Econômico" />
-                        </a>
-                        <div class="portfolio-caption">
+                        <img class="img-fluid" src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Carro Econômico" />
+                        <div class="portfolio-caption p-4">
                             <div class="portfolio-caption-heading">Econômicos</div>
-                            <div class="portfolio-caption-subheading text-muted">Perfeitos para cidade</div>
+                            <div class="portfolio-caption-subheading text-muted mb-2">Praticidade para o dia a dia.</div>
+                            <p class="text-muted small">Perfeitos para a cidade, ágeis e com baixo consumo. Ideais para quem busca eficiência. <br><strong>Modelos:</strong> Onix, HB20, Kwid.</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 col-sm-6 mb-4">
-                    <!-- Portfolio item 2-->
+                <div class="col-lg-4 col-sm-6 mb-4" data-aos="zoom-in" data-aos-delay="100">
                     <div class="portfolio-item">
-                        <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal2">
-                            <div class="portfolio-hover">
-                                <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
-                            </div>
-                            <img class="img-fluid" src="https://images.unsplash.com/photo-1542362567-b07e54358753?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80" alt="Carro SUV" />
-                        </a>
-                        <div class="portfolio-caption">
+                         <img class="img-fluid" src="https://images.unsplash.com/photo-1542362567-b07e54358753?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Carro SUV" />
+                        <div class="portfolio-caption p-4">
                             <div class="portfolio-caption-heading">SUVs</div>
-                            <div class="portfolio-caption-subheading text-muted">Conforto e espaço</div>
+                            <div class="portfolio-caption-subheading text-muted mb-2">Aventura e conforto para a família.</div>
+                             <p class="text-muted small">Espaço de sobra, segurança e tecnologia para viagens inesquecíveis com quem você ama.<br><strong>Modelos:</strong> Compass, T-Cross, Creta.</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 col-sm-6 mb-4">
-                    <!-- Portfolio item 3-->
+                <div class="col-lg-4 col-sm-6 mb-4" data-aos="zoom-in" data-aos-delay="200">
                     <div class="portfolio-item">
-                        <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal3">
-                            <div class="portfolio-hover">
-                                <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
-                            </div>
-                            <img class="img-fluid" src="https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80" alt="Carro Executivo" />
-                        </a>
-                        <div class="portfolio-caption">
+                        <img class="img-fluid" src="https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Carro Executivo" />
+                        <div class="portfolio-caption p-4">
                             <div class="portfolio-caption-heading">Executivos</div>
-                            <div class="portfolio-caption-subheading text-muted">Classe e conforto</div>
+                            <div class="portfolio-caption-subheading text-muted mb-2">Sofisticação e performance.</div>
+                            <p class="text-muted small">Para quem não abre mão de classe e conforto em viagens de negócios ou ocasiões especiais.<br><strong>Modelos:</strong> Corolla, Civic, Virtus.</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 col-sm-6 mb-4 mb-lg-0">
-                    <!-- Portfolio item 4-->
-                    <div class="portfolio-item">
-                        <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal4">
-                            <div class="portfolio-hover">
-                                <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
-                            </div>
-                            <img class="img-fluid" src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80" alt="Pickup" />
-                        </a>
-                        <div class="portfolio-caption">
-                            <div class="portfolio-caption-heading">Pickups</div>
-                            <div class="portfolio-caption-subheading text-muted">Força e capacidade</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-sm-6 mb-4 mb-sm-0">
-                    <!-- Portfolio item 5-->
-                    <div class="portfolio-item">
-                        <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal5">
-                            <div class="portfolio-hover">
-                                <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
-                            </div>
-                            <img class="img-fluid" src="https://images.unsplash.com/photo-1563720223880-4d93eef1f1c2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80" alt="Minivan" />
-                        </a>
-                        <div class="portfolio-caption">
-                            <div class="portfolio-caption-heading">Minivans</div>
-                            <div class="portfolio-caption-subheading text-muted">Ideal para família</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <!-- Portfolio item 6-->
-                    <div class="portfolio-item">
-                        <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal6">
-                            <div class="portfolio-hover">
-                                <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
-                            </div>
-                            <img class="img-fluid" src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80" alt="Carro Esportivo" />
-                        </a>
-                        <div class="portfolio-caption">
-                            <div class="portfolio-caption-heading">Esportivos</div>
-                            <div class="portfolio-caption-subheading text-muted">Emoção e performance</div>
-                        </div>
-                    </div>
-                </div>
+            </div>
+            <div class="text-center mt-4">
+                <a href="#" class="btn btn-dark btn-lg">Ver Frota Completa</a>
             </div>
         </div>
     </section>
-    <!-- About-->
+    
     <section class="page-section" id="about">
         <div class="container">
             <div class="text-center">
                 <h2 class="section-heading text-uppercase">Nossa História</h2>
-                <h3 class="section-subheading text-muted">Uma trajetória de sucesso no mercado de aluguel de veículos.</h3>
+                <h3 class="section-subheading text-muted">Uma jornada de paixão por carros e compromisso com nossos clientes.</h3>
             </div>
-            <ul class="timeline">
-                <li>
-                    <div class="timeline-image"><img class="rounded-circle img-fluid" src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=0773&q=80" alt="Fundação" /></div>
-                    <div class="timeline-panel">
-                        <div class="timeline-heading">
-                            <h4>2009-2011</h4>
-                            <h4 class="subheading">Nossos Humildes Começos</h4>
+            <div class="row gx-5">
+                <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="story-card">
+                        <div class="icon-circle"><i class="fas fa-seedling"></i></div>
+                        <div>
+                            <h4 class="subheading">O Início de um Sonho</h4>
+                            <p class="year">2009</p>
+                            <p class="text-muted">A AutoRent nasceu da visão de oferecer um serviço de aluguel de carros que combinasse qualidade, transparência e um atendimento verdadeiramente pessoal.</p>
                         </div>
-                        <div class="timeline-body"><p class="text-muted">A AutoRent foi fundada com apenas 5 carros e um grande sonho: revolucionar o mercado de aluguel de veículos no Brasil com transparência e qualidade.</p></div>
                     </div>
-                </li>
-                <li class="timeline-inverted">
-                    <div class="timeline-image"><img class="rounded-circle img-fluid" src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80" alt="Crescimento" /></div>
-                    <div class="timeline-panel">
-                        <div class="timeline-heading">
-                            <h4>Março de 2011</h4>
-                            <h4 class="subheading">Uma Empresa é Criada</h4>
+                </div>
+                <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="story-card">
+                        <div class="icon-circle"><i class="fas fa-chart-line"></i></div>
+                        <div>
+                            <h4 class="subheading">Crescimento e Reconhecimento</h4>
+                            <p class="year">2012</p>
+                            <p class="text-muted">Graças à confiança de nossos primeiros clientes, expandimos nossa frota e alcançamos novos mercados, solidificando nossa presença no setor de mobilidade.</p>
                         </div>
-                        <div class="timeline-body"><p class="text-muted">Com um ano de operação, já tínhamos expandido para 3 cidades e aumentado nossa frota para 50 veículos, sempre mantendo o padrão de qualidade.</p></div>
                     </div>
-                </li>
-                <li>
-                    <div class="timeline-image"><img class="rounded-circle img-fluid" src="https://images.unsplash.com/photo-1568992687947-868a62a9f521?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1776&q=80" alt="Expansão" /></div>
-                    <div class="timeline-panel">
-                        <div class="timeline-heading">
-                            <h4>Dezembro de 2015</h4>
-                            <h4 class="subheading">Expansão para Serviço Completo</h4>
+                </div>
+                <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="story-card">
+                        <div class="icon-circle"><i class="fas fa-lightbulb"></i></div>
+                        <div>
+                            <h4 class="subheading">Inovação e Tecnologia</h4>
+                            <p class="year">2018</p>
+                            <p class="text-muted">Investimos pesado em tecnologia, lançando um aplicativo moderno e um sistema de reservas online para tornar a experiência do aluguel ainda mais fluida.</p>
                         </div>
-                        <div class="timeline-body"><p class="text-muted">Implementamos serviços corporativos e de longo prazo, nos tornando uma referência no segmento de frotas empresariais.</p></div>
                     </div>
-                </li>
-                <li class="timeline-inverted">
-                    <div class="timeline-image"><img class="rounded-circle img-fluid" src="https://images.unsplash.com/photo-1434626881859-194d67b2b86f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1774&q=80" alt="Consolidação" /></div>
-                    <div class="timeline-panel">
-                        <div class="timeline-heading">
-                            <h4>Julho de 2020</h4>
-                            <h4 class="subheading">Fase Dois de Expansão</h4>
+                </div>
+                <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="400">
+                    <div class="story-card">
+                        <div class="icon-circle"><i class="fas fa-globe-americas"></i></div>
+                        <div>
+                            <h4 class="subheading">Rumo ao Futuro</h4>
+                            <p class="year">Hoje</p>
+                            <p class="text-muted">Com uma frota diversificada e um olhar no futuro da mobilidade, continuamos a inovar e a expandir, sempre com o compromisso de excelência que nos define.</p>
                         </div>
-                        <div class="timeline-body"><p class="text-muted">Apesar dos desafios globais, modernizamos nossa frota e implementamos sistema de reservas online, aumentando nossa presença digital.</p></div>
                     </div>
-                </li>
-                <li class="timeline-inverted">
-                    <div class="timeline-image">
-                        <h4>
-                            Faça Parte
-                            <br />
-                            Da Nossa
-                            <br />
-                            História!
-                        </h4>
-                    </div>
-                </li>
-            </ul>
+                </div>
+            </div>
+            <div class="text-center mt-5" data-aos="fade-up" data-aos-delay="500">
+                <h4 class="section-subheading text-muted" style="margin-bottom: 0;">Junte-se à AutoRent e faça parte de uma história onde cada viagem é uma nova conquista.</h4>
+            </div>
         </div>
     </section>
-    <!-- Team-->
+
     <section class="page-section bg-light" id="team">
         <div class="container">
             <div class="text-center">
                 <h2 class="section-heading text-uppercase">Nosso Time</h2>
-                <h3 class="section-subheading text-muted">Profissionais dedicados para melhor atendê-lo.</h3>
+                <h3 class="section-subheading text-muted">As pessoas por trás da sua melhor experiência sobre rodas.</h3>
             </div>
             <div class="row">
-                <div class="col-lg-4">
+                <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
                     <div class="team-member">
-                        <img class="mx-auto rounded-circle" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80" alt="Gerente" />
-                        <h4>Carlos Silva</h4>
-                        <p class="text-muted">Gerente Geral</p>
-                        <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                        <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                        <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <img class="mx-auto rounded-circle" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80" alt="Carlos Silva" />
+                        <h4 class="mt-3">Carlos Silva</h4>
+                        <p class="text-muted">Fundador & CEO</p>
+                        <p class="text-muted small px-3">Apaixonado por carros desde criança, Carlos fundou a AutoRent com o objetivo de transformar a relação das pessoas com a mobilidade.</p>
                     </div>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
                     <div class="team-member">
-                        <img class="mx-auto rounded-circle" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80" alt="Vendedora" />
-                        <h4>Ana Oliveira</h4>
-                        <p class="text-muted">Coordenadora de Vendas</p>
-                        <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                        <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                        <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <img class="mx-auto rounded-circle" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&q=80" alt="Ana Oliveira" />
+                        <h4 class="mt-3">Ana Oliveira</h4>
+                        <p class="text-muted">Head de Experiência do Cliente</p>
+                        <p class="text-muted small px-3">Ana lidera nossa equipe de atendimento, garantindo que cada cliente receba um serviço 5 estrelas do início ao fim do aluguel.</p>
                     </div>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-lg-4" data-aos="fade-up" data-aos-delay="300">
                     <div class="team-member">
-                        <img class="mx-auto rounded-circle" src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80" alt="Mecânico" />
-                        <h4>Roberto Santos</h4>
-                        <p class="text-muted">Supervisor de Manutenção</p>
-                        <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                        <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                        <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <img class="mx-auto rounded-circle" src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80" alt="Roberto Santos" />
+                        <h4 class="mt-3">Roberto Santos</h4>
+                        <p class="text-muted">Chefe de Operações e Frota</p>
+                        <p class="text-muted small px-3">Roberto é o guardião da nossa frota, garantindo que cada veículo esteja em perfeitas condições de segurança e limpeza para sua viagem.</p>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-8 mx-auto text-center"><p class="large text-muted">Nossa equipe é composta por profissionais qualificados e comprometidos em oferecer a melhor experiência em aluguel de veículos para você.</p></div>
             </div>
         </div>
     </section>
-    <!-- Clients-->
+    
     <div class="py-5">
         <div class="container">
-            <div class="row align-items-center">
-                <div class="col-md-3 col-sm-6 my-3">
-                    <a href="#!"><img class="img-fluid img-brand d-block mx-auto" src="https://logodownload.org/wp-content/uploads/2014/09/volkswagen-logo-1-1.png" alt="Volkswagen" /></a>
-                </div>
-                <div class="col-md-3 col-sm-6 my-3">
-                    <a href="#!"><img class="img-fluid img-brand d-block mx-auto" src="https://www.logo.wine/a/logo/Toyota/Toyota-Logo.wine.svg" alt="Toyota" /></a>
-                </div>
-                <div class="col-md-3 col-sm-6 my-3">
-                    <a href="#!"><img class="img-fluid img-brand d-block mx-auto" src="https://www.logo.wine/a/logo/Hyundai_Motor_Company/Hyundai_Motor_Company-Logo.wine.svg" alt="Hyundai" /></a>
-                </div>
-                <div class="col-md-3 col-sm-6 my-3">
-                    <a href="#!"><img class="img-fluid img-brand d-block mx-auto" src="https://www.logo.wine/a/logo/Ford_Motor_Company/Ford_Motor_Company-Logo.wine.svg" alt="Ford" /></a>
-                </div>
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h3 class="section-heading text-uppercase fs-4">As Melhores Marcas na Nossa Garagem</h3>
+            </div>
+            <div class="row align-items-center" data-aos="fade-up">
+                <div class="col-md-3 col-sm-6 my-3"><img class="img-fluid img-brand d-block mx-auto" src="https://logodownload.org/wp-content/uploads/2014/09/volkswagen-logo-1-1.png" alt="Volkswagen" style="max-height: 50px;" /></div>
+                <div class="col-md-3 col-sm-6 my-3"><img class="img-fluid img-brand d-block mx-auto" src="https://www.logo.wine/a/logo/Toyota/Toyota-Logo.wine.svg" alt="Toyota" style="max-height: 50px;" /></div>
+                <div class="col-md-3 col-sm-6 my-3"><img class="img-fluid img-brand d-block mx-auto" src="https://www.logo.wine/a/logo/Hyundai_Motor_Company/Hyundai_Motor_Company-Logo.wine.svg" alt="Hyundai" style="max-height: 50px;" /></div>
+                <div class="col-md-3 col-sm-6 my-3"><img class="img-fluid img-brand d-block mx-auto" src="https://www.logo.wine/a/logo/Ford_Motor_Company/Ford_Motor_Company-Logo.wine.svg" alt="Ford" style="max-height: 50px;" /></div>
             </div>
         </div>
     </div>
-    <!-- Contact-->
+    
     <section class="page-section" id="contact">
         <div class="container">
             <div class="text-center">
                 <h2 class="section-heading text-uppercase">Entre em Contato</h2>
-                <h3 class="section-subheading text-muted">Estamos à disposição para melhor atendê-lo.</h3>
+                <h3 class="section-subheading text-muted">Tem alguma dúvida? Nossa equipe está pronta para ajudar.</h3>
             </div>
-            <form id="contactForm">
-                <div class="row align-items-stretch mb-5">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <input class="form-control" id="name" type="text" placeholder="Seu Nome *" required />
+            <div class="row gx-5 align-items-center">
+                <div class="col-lg-7" data-aos="fade-right">
+                    <form id="contactForm">
+                        <div class="row align-items-stretch mb-5">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-4"><input class="form-control" id="name" type="text" placeholder="Seu Nome *" required /><label for="name">Seu Nome *</label></div>
+                                <div class="form-floating mb-4"><input class="form-control" id="email" type="email" placeholder="Seu Email *" required /><label for="email">Seu Email *</label></div>
+                                <div class="form-floating mb-4"><input class="form-control" id="phone" type="tel" placeholder="Seu Telefone *" required /><label for="phone">Seu Telefone *</label></div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating form-floating-textarea mb-4"><textarea class="form-control" id="message" placeholder="Sua Mensagem *" style="height: 12rem" required></textarea><label for="message">Sua Mensagem *</label></div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <input class="form-control" id="email" type="email" placeholder="Seu Email *" required />
+                        <div class="text-center"><button class="btn btn-primary btn-xl text-uppercase" id="submitButton" type="submit">Enviar Mensagem</button></div>
+                    </form>
+                </div>
+                <div class="col-lg-5" data-aos="fade-left" data-aos-delay="200">
+                    <div class="contact-info">
+                        <h4 class="mb-4">Nossos Canais</h4>
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-map-marker-alt fa-2x me-3"></i>
+                            <p class="mb-0">Av. Principal, 123 - Centro<br>Contagem, MG - Brasil</p>
                         </div>
-                        <div class="form-group mb-md-0">
-                            <input class="form-control" id="phone" type="tel" placeholder="Seu Telefone *" required />
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-phone fa-2x me-3"></i>
+                            <p class="mb-0">+55 (31) 3333-4444</p>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group form-group-textarea mb-md-0">
-                            <textarea class="form-control" id="message" placeholder="Sua Mensagem *" required></textarea>
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-envelope fa-2x me-3"></i>
+                            <p class="mb-0">contato@autorent.com.br</p>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-clock fa-2x me-3"></i>
+                            <p class="mb-0">Seg - Sáb: 8h às 20h</p>
                         </div>
                     </div>
                 </div>
-                <div class="text-center">
-                    <button class="btn btn-primary btn-xl text-uppercase" id="submitButton" type="submit">Enviar Mensagem</button>
-                </div>
-            </form>
+            </div>
         </div>
     </section>
-    <!-- Footer-->
-    <footer class="footer py-4">
+    
+    <footer class="footer">
         <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-4 text-lg-start">Copyright &copy; AutoRent 2023</div>
-                <div class="col-lg-4 my-3 my-lg-0">
+            <div class="row">
+                <div class="col-lg-4 mb-5 mb-lg-0">
+                    <h5>Sobre a AutoRent</h5>
+                    <p>Somos uma empresa dedicada a oferecer as melhores soluções em mobilidade. Com uma frota moderna e um serviço de excelência, estamos aqui para tornar sua jornada mais fácil e prazerosa.</p>
+                </div>
+                <div class="col-lg-4 mb-5 mb-lg-0">
+                    <h5>Links Rápidos</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#services">Serviços</a></li>
+                        <li><a href="#portfolio">Nossa Frota</a></li>
+                        <li><a href="#about">Nossa História</a></li>
+                        <li><a href="#">Política de Privacidade</a></li>
+                        <li><a href="#">Termos de Uso</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4">
+                    <h5>Contato</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-phone me-2"></i>+55 (31) 3333-4444</li>
+                        <li><i class="fas fa-envelope me-2"></i>contato@autorent.com.br</li>
+                        <li><i class="fas fa-map-marker-alt me-2"></i>Av. Principal, 123 - Contagem, MG</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row footer-bottom align-items-center">
+                <div class="col-lg-6 text-center text-lg-start">Copyright &copy; AutoRent 2025</div>
+                <div class="col-lg-6 text-center text-lg-end">
                     <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
                     <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
                     <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                </div>
-                <div class="col-lg-4 text-lg-end">
-                    <a class="link-dark text-decoration-none me-3" href="#!">Política de Privacidade</a>
-                    <a class="link-dark text-decoration-none" href="#!">Termos de Uso</a>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Core theme JS-->
     <script>
-        // Navbar background change on scroll
-        $(document).ready(function(){
-            $(window).scroll(function(){
-                var scroll = $(window).scrollTop();
-                if (scroll > 50) {
-                    $(".navbar").css("background" , "#2c3e50");
-                } else {
-                    $(".navbar").css("background" , "transparent");
+        // Inicializa a biblioteca de animações
+        AOS.init({
+            duration: 800, // Duração da animação em ms
+            once: true,    // Animação acontece apenas uma vez
+            offset: 50,    // Inicia a animação um pouco antes do elemento aparecer
+        });
+
+        window.addEventListener('DOMContentLoaded', event => {
+            // Função para encolher a navbar
+            var navbarShrink = function () {
+                const navbarCollapsible = document.body.querySelector('#mainNav');
+                if (!navbarCollapsible) {
+                    return;
                 }
+                if (window.scrollY === 0) {
+                    navbarCollapsible.classList.remove('navbar-shrink')
+                } else {
+                    navbarCollapsible.classList.add('navbar-shrink')
+                }
+            };
+            navbarShrink();
+            document.addEventListener('scroll', navbarShrink);
+
+            // Ativa o scrollspy no elemento de navegação principal
+            const mainNav = document.body.querySelector('#mainNav');
+            if (mainNav) {
+                new bootstrap.ScrollSpy(document.body, {
+                    target: '#mainNav',
+                    offset: 74,
+                });
+            };
+
+            // Fecha o menu responsivo quando um link é clicado
+            const navbarToggler = document.body.querySelector('.navbar-toggler');
+            const responsiveNavItems = [].slice.call(
+                document.querySelectorAll('#navbarResponsive .nav-link')
+            );
+            responsiveNavItems.map(function (responsiveNavItem) {
+                responsiveNavItem.addEventListener('click', () => {
+                    if (window.getComputedStyle(navbarToggler).display !== 'none') {
+                        navbarToggler.click();
+                    }
+                });
             });
         });
     </script>
 </body>
-</html>
+</html> 

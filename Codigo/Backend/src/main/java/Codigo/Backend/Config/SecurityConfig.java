@@ -14,7 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-@EnableMethodSecurity // habilita uso de @PreAuthorize nos controllers
+@EnableMethodSecurity 
 public class SecurityConfig {
 
     private final MyUserDetailsService userDetailsService;
